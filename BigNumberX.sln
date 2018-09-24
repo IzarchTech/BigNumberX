@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BigNumberX", "BigNumberX\BigNumberX.csproj", "{95B33BC5-5F61-48D4-BE6B-C055687D510D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BigNumberX.Test", "BigIntegerX.Test\BigNumberX.Test.csproj", "{4A08C28B-F785-492B-AE21-640A4F608E08}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{95B33BC5-5F61-48D4-BE6B-C055687D510D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95B33BC5-5F61-48D4-BE6B-C055687D510D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95B33BC5-5F61-48D4-BE6B-C055687D510D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95B33BC5-5F61-48D4-BE6B-C055687D510D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A08C28B-F785-492B-AE21-640A4F608E08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A08C28B-F785-492B-AE21-640A4F608E08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A08C28B-F785-492B-AE21-640A4F608E08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A08C28B-F785-492B-AE21-640A4F608E08}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
