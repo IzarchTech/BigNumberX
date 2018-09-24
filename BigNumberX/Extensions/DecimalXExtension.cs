@@ -33,18 +33,16 @@ namespace BigNumberX
         /// </exception>
         public static DecimalX IntPower(this DecimalX x, long exponent, int scale)
         {
-            DecimalX a, power;
-
             if (scale < 0)
                 throw new ArgumentException(InvalidScale);
 
             if (exponent < 0)
             {
-                a = DecimalX.Create(1);
+                var a = DecimalX.Create(1);
                 return a.CDivide(x.IntPower(-exponent, scale), scale, RoundingMode.HalfEven);
             }
 
-            power = DecimalX.Create(1);
+            var power = DecimalX.Create(1);
 
             while (exponent > 0)
             {
@@ -84,8 +82,7 @@ namespace BigNumberX
         /// </exception>
         public static DecimalX IntRoot(this DecimalX x, long index, int scale)
         {
-            DecimalX n, i, im1, tolerance, xPrev, xToIm1, xToI, numerator, denominator;
-            int sp1;
+            DecimalX xPrev;
 
             if (scale < 0)
                 throw new ArgumentException(InvalidScale);
@@ -93,11 +90,11 @@ namespace BigNumberX
             if (x.Signum() < 0)
                 throw new ArgumentException(NegativeIntRoot);
 
-            sp1 = scale + 1;
-            n = x;
-            i = DecimalX.Create(index);
-            im1 = DecimalX.Create(index - 1);
-            tolerance = DecimalX.Create(5);
+            var sp1 = scale + 1;
+            var n = x;
+            var i = DecimalX.Create(index);
+            var im1 = DecimalX.Create(index - 1);
+            var tolerance = DecimalX.Create(5);
             tolerance= tolerance.MovePointLeft(sp1);
 
             // The initial approximation is x/index.
@@ -108,18 +105,18 @@ namespace BigNumberX
             do
             {
                 // x^(index-1)
-                xToIm1 = x.IntPower(index - 1, sp1);
+                var xToIm1 = x.IntPower(index - 1, sp1);
 
                 // x^index
-                xToI = x.Multiply(xToIm1);
+                var xToI = x.Multiply(xToIm1);
                 xToI = DecimalX.Rescale(xToI, -sp1, RoundingMode.HalfEven);
 
                 // n + (index-1)*(x^index)
-                numerator = n.Add(im1.Multiply(xToI));
+                var numerator = n.Add(im1.Multiply(xToI));
                 numerator = DecimalX.Rescale(numerator, -sp1, RoundingMode.HalfEven);
 
                 // (index*(x^(index-1))
-                denominator = i.Multiply(xToIm1);
+                var denominator = i.Multiply(xToIm1);
                 denominator = DecimalX.Rescale(denominator, -sp1, RoundingMode.HalfEven);
 
                 // x = (n + (index-1)*(x^index)) / (index*(x^(index-1)))
@@ -148,8 +145,6 @@ namespace BigNumberX
         /// </exception>
         public static DecimalX Exp(this DecimalX x, int scale)
         {
-            DecimalX a, xWhole, xFraction, z, t, maxLong, tempRes, b;
-
             if (scale <= 0)
                 throw new ArgumentException(InvalidScale2);
 
@@ -159,29 +154,29 @@ namespace BigNumberX
             }
             else if (x.Signum() == -1)
             {
-                a = DecimalX.Create(1);
+                var a = DecimalX.Create(1);
                 return a.CDivide(x.Negate().Exp(scale), scale, RoundingMode.HalfEven);
             }
 
             // Compute the whole part of x.
-            xWhole = DecimalX.Rescale(x, 0, RoundingMode.Down);
+            var xWhole = DecimalX.Rescale(x, 0, RoundingMode.Down);
 
             // If there isn't a whole part, compute and return e^x.
             if (xWhole.Signum() == 0)
                 return expTaylor(x, scale);
 
             // Compute the fraction part of x.
-            xFraction = x.Subtract(xWhole);
+            var xFraction = x.Subtract(xWhole);
 
             // z = 1 + fraction/whole
-            b = DecimalX.Create(1);
-            z = b.Add(xFraction.CDivide(xWhole, scale, RoundingMode.HalfEven));
+            var b = DecimalX.Create(1);
+            var z = b.Add(xFraction.CDivide(xWhole, scale, RoundingMode.HalfEven));
 
             // t = e^z
-            t = expTaylor(z, scale);
+            var t = expTaylor(z, scale);
 
-            maxLong = DecimalX.Create(long.MaxValue);
-            tempRes = DecimalX.Create(1);
+            var maxLong = DecimalX.Create(long.MaxValue);
+            var tempRes = DecimalX.Create(1);
 
             // Compute and return t^whole using IntPower().
             // If whole > Int64.MaxValue, then first compute products
@@ -202,8 +197,7 @@ namespace BigNumberX
         /// </summary>
         public static DecimalX Ln(this DecimalX x, int scale)
         {
-            DecimalX root, lnRoot, a;
-            int magnitude;
+            DecimalX a;
             // Check that scale > 0.
             if (scale <= 0)
                 throw new ArgumentException(InvalidScale2);
@@ -213,25 +207,23 @@ namespace BigNumberX
                 throw new ArgumentException(NegativeOrZeroNaturalLog);
 
             // The number of digits to the left of the decimal point.
-            magnitude = x.ToString().Length - -x.Exponent - 1;
+            var magnitude = x.ToString().Length - -x.Exponent - 1;
 
             if (magnitude < 3)
             {
                 return lnNewton(x, scale);
             }
-            else
-            {
-                // x^(1/magnitude)
-                root = x.IntRoot(magnitude, scale);
 
-                // ln(x^(1/magnitude))
-                lnRoot = lnNewton(root, scale);
+            // x^(1/magnitude)
+            var root = x.IntRoot(magnitude, scale);
 
-                // magnitude*ln(x^(1/magnitude))
-                a = DecimalX.Create(magnitude);
-                var result = a.Multiply(lnRoot);
-                return DecimalX.Rescale(result, -scale, RoundingMode.HalfEven);
-            }
+            // ln(x^(1/magnitude))
+            var lnRoot = lnNewton(root, scale);
+
+            // magnitude*ln(x^(1/magnitude))
+            a = DecimalX.Create(magnitude);
+            var result = a.Multiply(lnRoot);
+            return DecimalX.Rescale(result, -scale, RoundingMode.HalfEven);
 
         }
 
@@ -254,9 +246,6 @@ namespace BigNumberX
         /// </exception>
         public static DecimalX Sqrt(this DecimalX x, int scale)
         {
-            IntegerX n, ix, ixPrev;
-            int bits;
-
             // Check that scale > 0.
             if (scale <= 0)
                 throw new ArgumentException(SqrtScaleInvalid);
@@ -269,12 +258,12 @@ namespace BigNumberX
                 return new DecimalX(x.ToIntegerX(), -scale);
 
             // n = x*(10^(2*scale))
-            n = x.MovePointRight(scale << 1).ToIntegerX();
+            var n = x.MovePointRight(scale << 1).ToIntegerX();
 
             // The first approximation is the upper half of n.
-            bits = (int)(n.BitLength() + 1) >> 1;
-            ix = n.RightShift(bits);
-            ixPrev = 0;
+            var bits = (int)(n.BitLength() + 1) >> 1;
+            var ix = n.RightShift(bits);
+            IntegerX ixPrev = 0;
 
             // Loop until the approximations converge
             // (two successive approximations are equal after rounding).
@@ -305,18 +294,17 @@ namespace BigNumberX
 
         private static DecimalX expTaylor(DecimalX x, int scale)
         {
-            DecimalX factorial, xPower, sumPrev, sum, term;
-            int i;
+            DecimalX sumPrev;
 
-            factorial = DecimalX.Create(1);
-            xPower = x;
+            var factorial = DecimalX.Create(1);
+            var xPower = x;
 
             // 1 + x
-            sum = x.Add(DecimalX.Create(1));
+            var sum = x.Add(DecimalX.Create(1));
 
             // Loop until the sums converge
             // (two successive sums are equal after rounding).
-            i = 2;
+            var i = 2;
 
             do
             {
@@ -328,7 +316,7 @@ namespace BigNumberX
                 factorial = factorial.Multiply(DecimalX.Create(i));
 
                 // x^i/i!
-                term = xPower.CDivide(factorial, scale, RoundingMode.HalfEven);
+                var term = xPower.CDivide(factorial, scale, RoundingMode.HalfEven);
 
                 // sum = sum + x^i/i!
                 sumPrev = sum;
@@ -342,14 +330,14 @@ namespace BigNumberX
 
         private static DecimalX lnNewton(DecimalX x, int scale)
         {
-            DecimalX n, term, tolerance, eToX;
+            DecimalX term;
             int sp1;
 
             sp1 = scale + 1;
-            n = x;
+            var n = x;
 
             // Convergence tolerance = 5*(10^-(scale+1))
-            tolerance = DecimalX.Create(5);
+            var tolerance = DecimalX.Create(5);
             tolerance = tolerance.MovePointLeft(sp1);
 
             // Loop until the approximations converge
@@ -357,7 +345,7 @@ namespace BigNumberX
             do
             {
                 // e^x
-                eToX = x.Exp(sp1);
+                var eToX = x.Exp(sp1);
 
                 // (e^x - n)/e^x
                 term = eToX.Subtract(n).CDivide(eToX, sp1, RoundingMode.Down);

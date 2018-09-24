@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("BigNumberX")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Arbitrary Precision Library for .NET (DOT NET) with Support for Integer and Floating Point Computations")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Izarch Technologies")]
 [assembly: AssemblyProduct("BigNumberX")]
