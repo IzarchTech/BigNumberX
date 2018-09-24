@@ -213,7 +213,7 @@ namespace BigNumberX
                 throw new ArgumentException(NegativeOrZeroNaturalLog);
 
             // The number of digits to the left of the decimal point.
-            magnitude = x.ToString().Length - (-x.Exponent) - 1;
+            magnitude = x.ToString().Length - -x.Exponent - 1;
 
             if (magnitude < 3)
             {
@@ -297,7 +297,7 @@ namespace BigNumberX
             }
             else
             {
-                divisor = DecimalX.Rescale(divisor, (dividend.CheckExponent((long)dividend.Exponent - (-scale))), RoundingMode.Unnecessary);
+                divisor = DecimalX.Rescale(divisor, dividend.CheckExponent((long)dividend.Exponent - -scale), RoundingMode.Unnecessary);
             }
 
             return new DecimalX(DecimalX.RoundingDivide2(dividend.Coefficient, divisor.Coefficient, roundingMode), -scale);

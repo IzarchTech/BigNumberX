@@ -251,7 +251,7 @@ namespace BigNumberX.Test
             while (i < Math.Log(double.MaxValue, 2))
             {
                 b = IntegerX.Create(Math.Pow(2.0, i));
-                Assert.IsTrue(b == (IntegerX.One << i));
+                Assert.IsTrue(b == IntegerX.One << i);
                 i++;
             }
         }
@@ -1371,9 +1371,9 @@ namespace BigNumberX.Test
             {
                 rshift = 32 - i;
                 IntegerX.Normalize(ref xn, 3, x, 2, i);
-                Assert.IsTrue(xn[2] == (x[1] << i));
+                Assert.IsTrue(xn[2] == x[1] << i);
                 Assert.IsTrue(xn[1] == (x[0] << i | x[1] >> rshift));
-                Assert.IsTrue(xn[0] == (x[0] >> rshift));
+                Assert.IsTrue(xn[0] == x[0] >> rshift);
                 i++;
             }
         }
@@ -1396,7 +1396,7 @@ namespace BigNumberX.Test
             {
                 rshift = 32 - i;
                 IntegerX.Normalize(ref xn, 2, x, 2, i);
-                Assert.IsTrue(xn[1] == (x[1] << i));
+                Assert.IsTrue(xn[1] == x[1] << i);
                 Assert.IsTrue(xn[0] == (x[0] << i | x[1] >> rshift));
                 i++;
             }
@@ -1569,7 +1569,7 @@ namespace BigNumberX.Test
             }
 
             i = 0;
-            while (i < (m - 1))
+            while (i < m - 1)
             {
                 bmnArray[i] = 0xFFFFFFFF;
                 i++;
@@ -1578,14 +1578,14 @@ namespace BigNumberX.Test
             bmnArray[m - 1] = 0xFFFFFFFE;
 
             i = 0;
-            while (i < (n - m))
+            while (i < n - m)
             {
                 bmnArray[m + i] = 0xFFFFFFFF;
                 i++;
             }
 
             i = 0;
-            while (i < (m - 2))
+            while (i < m - 2)
             {
                 bmnArray[n + i] = 0;
                 i++;
@@ -1608,7 +1608,7 @@ namespace BigNumberX.Test
             while (m < 5)
             {
                 n = m + 1;
-                while (n < (m + 5))
+                while (n < m + 5)
                 {
                     GenerateKnuthExample(m, n, out bmn, out bm, out bn);
 
@@ -1832,8 +1832,8 @@ namespace BigNumberX.Test
             y= new IntegerX(-1, new uint[] { digit1, digit2, 0 });
 
             d0 = digit1;
-            d1 = digit2 &(~digit1);
-            d2 = digit1 &(~(digit2) + 1);
+            d1 = digit2 &~digit1;
+            d2 = digit1 &(~digit2 + 1);
             d3 = 0;
 
             z= new IntegerX(1, new uint[] { d0, d1, d2, d3 });
@@ -1854,8 +1854,8 @@ namespace BigNumberX.Test
             x = new IntegerX(-1, new uint[] { digit1, digit2, digit1, digit2 });
             y = new IntegerX(1, new uint[] { digit1, digit2, 0 });
 
-            d0 = (~digit2) & digit1;
-            d1 = (~digit1) & digit2;
+            d0 = ~digit2 & digit1;
+            d1 = ~digit1 & digit2;
             d2 = 0;
 
             z = new IntegerX(1, new uint[] { d0, d1, d2 });
@@ -1877,8 +1877,8 @@ namespace BigNumberX.Test
             y=  new IntegerX(-1, new uint[] { digit1, digit2, 0 });
 
             d0=  digit1;
-            d1=  ~((~digit2) & (~digit1));
-            d2=  ~((~digit1) & ((~digit2) + 1)) + 1;
+            d1=  ~(~digit2 & ~digit1);
+            d2=  ~(~digit1 & (~digit2 + 1)) + 1;
             d3=  0;
 
             z=  new IntegerX(-1, new uint[] { d0, d1, d2, d3 });
@@ -1924,9 +1924,9 @@ namespace BigNumberX.Test
              digit1, digit2 });
             y = new IntegerX(-1, new uint[] { digit1, digit2, 0 });
 
-            d0 = ~(digit2 | (~digit1));
-            d1 = ~(digit1 | ((~digit2) + 1));
-            d2 = (~digit2) + 1;
+            d0 = ~(digit2 | ~digit1);
+            d1 = ~(digit1 | (~digit2 + 1));
+            d2 = ~digit2 + 1;
 
             z = new IntegerX(-1, new uint[] { d0, d1, d2 });
             w = x | y;
@@ -1947,9 +1947,9 @@ namespace BigNumberX.Test
             y = new IntegerX(1, new uint[] { digit1, digit2, 0 });
 
             d0 = digit1;
-            d1 = ~((~digit2) | digit1);
-            d2 = ~((~digit1) | digit2);
-            d3 = ~((~digit2) + 1) + 1;
+            d1 = ~(~digit2 | digit1);
+            d2 = ~(~digit1 | digit2);
+            d3 = ~(~digit2 + 1) + 1;
 
             z = new IntegerX(-1, new uint[] { d0, d1, d2, d3 });
             w = x | y;
@@ -1969,9 +1969,9 @@ namespace BigNumberX.Test
             x = new IntegerX(-1, new uint[] { digit1, digit2, digit1, digit2 });
             y = new IntegerX(-1, new uint[] { digit1, digit2, 0 });
 
-            d0 = ~((~digit2) | (~digit1));
-            d1 = ~((~digit1) | (~digit2));
-            d2 = ~((~digit2) + 1) + 1;
+            d0 = ~(~digit2 | ~digit1);
+            d1 = ~(~digit1 | ~digit2);
+            d2 = ~(~digit2 + 1) + 1;
 
             z = new IntegerX(-1, new uint[] { d0, d1, d2 });
             w = x | y;
@@ -2014,9 +2014,9 @@ namespace BigNumberX.Test
             x = new IntegerX(1, new uint[] { digit1, digit2, digit1, digit2 });
             y = new IntegerX(-1, new uint[] { digit1, digit2, 0 });
 
-            d0 = digit1 ^(~(uint)0x0);
-            d1 = digit2 ^(~digit1);
-            d2 = digit1 ^((~digit2) + 1);
+            d0 = digit1 ^~(uint)0x0;
+            d1 = digit2 ^~digit1;
+            d2 = digit1 ^(~digit2 + 1);
             d3 = digit2 ^ 0x0;
 
             z = new IntegerX(1, new uint[] { d0, d1, d2, d3 });
@@ -2037,10 +2037,10 @@ namespace BigNumberX.Test
             x = new IntegerX(-1, new uint[] { digit1, digit2, digit1, digit2 });
             y = new IntegerX(1, new uint[] { digit1, digit2, 0 });
 
-            d0 = (~digit1) ^ 0x0;
-            d1 = (~digit2) ^ digit1;
-            d2 = (~digit1) ^ digit2;
-            d3 = ((~digit2) +1) ^ (uint)0x0;
+            d0 = ~digit1 ^ 0x0;
+            d1 = ~digit2 ^ digit1;
+            d2 = ~digit1 ^ digit2;
+            d3 = (~digit2 +1) ^ (uint)0x0;
 
             z = new IntegerX(1, new uint[] { d0, d1, d2, d3 });
             w = x ^ y;
@@ -2061,10 +2061,10 @@ namespace BigNumberX.Test
              digit1, digit2 });
             y = new IntegerX(-1, new uint[] { digit1, digit2, 0 });
 
-            d0 = ~((~digit1) ^ (~(uint)0x0));
-            d1 = ~((~digit2) ^ (~digit1));
-            d2 = ~((~digit1) ^ ((~digit2) + 1));
-            d3 = ~(((~digit2) + 1) ^ 0x0) + 1;
+            d0 = ~(~digit1 ^ ~(uint)0x0);
+            d1 = ~(~digit2 ^ ~digit1);
+            d2 = ~(~digit1 ^ (~digit2 + 1));
+            d3 = ~((~digit2 + 1) ^ 0x0) + 1;
 
             z = new IntegerX(-1, new uint[] { d0, d1, d2, d3 });
             w = x ^ y;
@@ -2085,8 +2085,8 @@ namespace BigNumberX.Test
             y = new IntegerX(1, new uint[] { digit1, digit2, 0 });
 
             d0 = digit1;
-            d1 = digit2 & (~digit1);
-            d2 = digit1 & (~digit2);
+            d1 = digit2 & ~digit1;
+            d2 = digit1 & ~digit2;
             d3 = digit2;
 
             z = new IntegerX(1, new uint[] { d0, d1, d2, d3 });
@@ -2108,7 +2108,7 @@ namespace BigNumberX.Test
             y = new IntegerX(-1, new uint[] { digit1, digit2, 0 });
 
             d0 = digit2 &  digit1;
-            d1 = digit1 & (~((~digit2) + 1));
+            d1 = digit1 & ~(~digit2 + 1);
             d2 = digit2;
 
             z = new IntegerX(1, new uint[] { d0, d1, d2 });
@@ -2152,9 +2152,9 @@ namespace BigNumberX.Test
             x = new IntegerX(-1, new uint[] {digit1, digit2, digit1, digit2 });
             y = new IntegerX(-1, new uint[] { digit1, digit2, 0 });
 
-            d0 = (~digit2) & digit1;
-            d1 = (~digit1) & (~((~digit2) + 1));
-            d2 = (~digit2) +1;
+            d0 = ~digit2 & digit1;
+            d1 = ~digit1 & ~(~digit2 + 1);
+            d2 = ~digit2 +1;
 
             z = new IntegerX(1, new uint[] { d0, d1, d2 });
             w = x.BitwiseAndNot(y);
@@ -2195,7 +2195,7 @@ namespace BigNumberX.Test
             x = new IntegerX(-1, new uint[] { digit1, digit2, 0 });
 
             d0 = digit1;
-            d1 = ~((~digit2) + 1);
+            d1 = ~(~digit2 + 1);
             d2 = 0xFFFFFFFF;
 
             z = new IntegerX(1, new uint[] { d0, d1, d2 });
@@ -2457,7 +2457,7 @@ namespace BigNumberX.Test
             uint digit3 = 0x1234678;
             var x = new IntegerX(1, new uint[] { digit1, digit2, digit3 });
             var y = x.LeftShift(7);
-            var w = new IntegerX(1, new uint[] { digit1 >> 25, ((digit1 << 7) | (digit2 >> 25)), ((digit2 << 7) | (digit3 >> 25)), (digit3 << 7)});
+            var w = new IntegerX(1, new uint[] { digit1 >> 25, (digit1 << 7) | (digit2 >> 25), (digit2 << 7) | (digit3 >> 25), digit3 << 7});
             Assert.IsTrue(y == w);
         }
 
@@ -2469,7 +2469,7 @@ namespace BigNumberX.Test
             uint digit3 = 0x1234678;
             var x = new IntegerX(-1, new uint[] { digit1, digit2, digit3 });
             var y = x.LeftShift(7);
-            var w = new IntegerX(-1, new uint[] { digit1 >> 25, ((digit1 << 7) | (digit2 >> 25)), ((digit2 << 7) | (digit3 >> 25)), (digit3 << 7) });
+            var w = new IntegerX(-1, new uint[] { digit1 >> 25, (digit1 << 7) | (digit2 >> 25), (digit2 << 7) | (digit3 >> 25), digit3 << 7 });
             Assert.IsTrue(y == w);
         }
 
@@ -2481,7 +2481,7 @@ namespace BigNumberX.Test
             uint digit3 = 0x1234678;
             var x = new IntegerX(1, new uint[] { digit1, digit2, digit3 });
             var y = x.LeftShift(7 + 64);
-            var w = new IntegerX(1, new uint[] { digit1 >> 25, ((digit1 << 7) | (digit2 >> 25)), ((digit2 << 7) | (digit3 >> 25)), (digit3 << 7), 0, 0 });
+            var w = new IntegerX(1, new uint[] { digit1 >> 25, (digit1 << 7) | (digit2 >> 25), (digit2 << 7) | (digit3 >> 25), digit3 << 7, 0, 0 });
             Assert.IsTrue(y == w);
         }
 
@@ -2493,7 +2493,7 @@ namespace BigNumberX.Test
             uint digit3 = 0x1234678;
             var x = new IntegerX(-1, new uint[] { digit1, digit2, digit3 });
             var y = x.LeftShift(7 + 64);
-            var w = new IntegerX(-1, new uint[] { digit1 >> 25, ((digit1 << 7) | (digit2 >> 25)), ((digit2 << 7) | (digit3 >> 25)), (digit3 << 7), 0, 0 });
+            var w = new IntegerX(-1, new uint[] { digit1 >> 25, (digit1 << 7) | (digit2 >> 25), (digit2 << 7) | (digit3 >> 25), digit3 << 7, 0, 0 });
             Assert.IsTrue(y == w);
         }
 
@@ -2505,7 +2505,7 @@ namespace BigNumberX.Test
             uint digit3 = 0x1234678;
             var x = new IntegerX(1, new uint[] { digit1, digit2, digit3 });
             var y = x.LeftShift(7 + 64);
-            var w = new IntegerX(1, new uint[] { digit1 >> 25, ((digit1 << 7) | (digit2 >> 25)), ((digit2 << 7) | (digit3 >> 25)), (digit3 << 7), 0, 0 });
+            var w = new IntegerX(1, new uint[] { digit1 >> 25, (digit1 << 7) | (digit2 >> 25), (digit2 << 7) | (digit3 >> 25), digit3 << 7, 0, 0 });
             Assert.IsTrue(y == w);
         }
 
@@ -2572,7 +2572,7 @@ namespace BigNumberX.Test
             uint digit3 = 0x1234678;
             var x = new IntegerX(1, new uint[] { digit1, digit2, digit3 });
             var y = x.RightShift(7);
-            var w = new IntegerX(1, new uint[] { digit1 >> 7, ((digit1 << 25) | (digit2 >> 7)), ((digit2 << 25) | (digit3 >> 7)) });
+            var w = new IntegerX(1, new uint[] { digit1 >> 7, (digit1 << 25) | (digit2 >> 7), (digit2 << 25) | (digit3 >> 7) });
             Assert.IsTrue(y == w);
         }
 
@@ -2584,7 +2584,7 @@ namespace BigNumberX.Test
             uint digit3 = 0x1234678;
             var x = new IntegerX(-1, new uint[] { digit1, digit2, digit3 });
             var y = x.RightShift(7);
-            var w = new IntegerX(-1, new uint[] { digit1 >> 7, ((digit1 << 25) | (digit2 >> 7)), (digit2 << 25) | (digit3 >> 7)});
+            var w = new IntegerX(-1, new uint[] { digit1 >> 7, (digit1 << 25) | (digit2 >> 7), (digit2 << 25) | (digit3 >> 7)});
             Assert.IsTrue(y == w);
         }
 

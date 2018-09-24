@@ -278,23 +278,20 @@ namespace BigNumberX
         /// <remarks>Watch out!  TDecimalX.Create(0.1) is not the same as TDecimalX.Parse("0.1").
         /// We create exact representations of doubles,
         /// and 1/10 does not have an exact representation as a double. So the double 1.0 is not exactly 1/10.</remarks>
-        public static DecimalX Create(double v)
+        private static DecimalX Create(double v)
         {
-            byte[] dbytes;
-            ulong significand;
-            int biasedExp, leftShift, expToUse;
             IntegerX coeff;
 
-            if ((double.IsNaN(v)) || (double.IsInfinity(v)))
+            if (double.IsNaN(v) || double.IsInfinity(v))
                 throw new ArgumentException("Infinity/NaN not supported in DecimalX (yet)");
 
             var val = BitConverter.GetBytes(v);
-            dbytes = new byte[Marshal.SizeOf(v)];
+            var dbytes = new byte[Marshal.SizeOf(v)];
             Array.Copy(val, dbytes, Marshal.SizeOf(v));
 
-            significand = IntegerX.GetDoubleSignificand(dbytes);
-            biasedExp = IntegerX.GetDoubleBiasedExponent(dbytes);
-            leftShift = biasedExp - DoubleShiftBias;
+            var significand = IntegerX.GetDoubleSignificand(dbytes);
+            int biasedExp = IntegerX.GetDoubleBiasedExponent(dbytes);
+            var leftShift = biasedExp - DoubleShiftBias;
 
             if (significand == 0)
             {
@@ -318,7 +315,7 @@ namespace BigNumberX
                     coeff *= -1;
             }
 
-            expToUse = 0;
+            var expToUse = 0;
             if (leftShift < 0)
             {
                 coeff = coeff.Multiply(IntegerX.Five.Power(-leftShift));
@@ -712,7 +709,7 @@ namespace BigNumberX
             }
 
             // Make sure we're not going past the end of the array
-            if ((offset + len) > buf.Length)
+            if (offset + len > buf.Length)
             {
                 if (throwOnError)
                     throw new FormatException("offset + len past the end of the char array");
@@ -725,14 +722,14 @@ namespace BigNumberX
             hasSign = false;
             c = buf[offset];
 
-            if ((c == '-') || (c == '+'))
+            if (c == '-' || c == '+')
             {
                 hasSign = true;
                 offset++;
                 len--;
             }
 
-            while ((len > 0) && (char.IsDigit(buf[offset])))
+            while (len > 0 && char.IsDigit(buf[offset]))
             {
                 offset++;
                 len--;
@@ -752,13 +749,13 @@ namespace BigNumberX
 
             //TODO revise NumberDecimalSeperator
             // using a FormatSettings so that library will be Locale - Aware
-            if ((len > 0) && (buf[offset].ToString() == MathContext._FCS.NumberFormat.NumberDecimalSeparator))
+            if (len > 0 && buf[offset].ToString() == MathContext._FCS.NumberFormat.NumberDecimalSeparator)
             {
                 offset++;
                 len--;
                 fractionOffset = offset;
 
-                while ((len > 0) && (char.IsDigit(buf[offset])))
+                while (len > 0 && char.IsDigit(buf[offset]))
                 {
                     offset++;
                     len--;
@@ -771,7 +768,7 @@ namespace BigNumberX
             expOffset = -1;
             expLen = 0;
 
-            if ((len > 0) && ((buf[offset] == 'e') || (buf[offset] == 'E')))
+            if (len > 0 && (buf[offset] == 'e' || buf[offset] == 'E'))
             {
                 offset++;
                 len--;
@@ -786,7 +783,7 @@ namespace BigNumberX
 
                 // Parse the optional sign;
                 c = buf[offset];
-                if ((c == '-') || (c == '+'))
+                if (c == '-' || c == '+')
                 {
                     offset++;
                     len--;
@@ -799,7 +796,7 @@ namespace BigNumberX
                     return false;
                 }
 
-                while ((len > 0) && (char.IsDigit(buf[offset])))
+                while (len > 0 && char.IsDigit(buf[offset]))
                 {
                     offset++;
                     len--;
@@ -878,7 +875,7 @@ namespace BigNumberX
                 i = 0;
 
             // Remove leading zeros from precision count.
-            while ((i < (signedMainLen + fractionLen)) && (Precision > 1) && (LDigits[i] == '0'))
+            while (i < signedMainLen + fractionLen && Precision > 1 && LDigits[i] == '0')
             {
                 i++;
                 Precision--;
@@ -912,21 +909,21 @@ namespace BigNumberX
             }
         }
 
-        public static explicit operator byte(DecimalX value) => (byte)((IntegerX)value);
+        public static explicit operator byte(DecimalX value) => (byte)(IntegerX)value;
 
-        public static explicit operator sbyte(DecimalX value) => (sbyte)((IntegerX)value);
+        public static explicit operator sbyte(DecimalX value) => (sbyte)(IntegerX)value;
 
-        public static explicit operator short(DecimalX value) => (short)((IntegerX)value);
+        public static explicit operator short(DecimalX value) => (short)(IntegerX)value;
 
-        public static explicit operator ushort(DecimalX value) => (ushort)((IntegerX)value);
+        public static explicit operator ushort(DecimalX value) => (ushort)(IntegerX)value;
 
-        public static explicit operator int(DecimalX value) => (int)((IntegerX)value);
+        public static explicit operator int(DecimalX value) => (int)(IntegerX)value;
 
-        public static explicit operator uint(DecimalX value) => (uint)((IntegerX)value);
+        public static explicit operator uint(DecimalX value) => (uint)(IntegerX)value;
 
-        public static explicit operator long(DecimalX value) => (long)((IntegerX)value);
+        public static explicit operator long(DecimalX value) => (long)(IntegerX)value;
 
-        public static explicit operator ulong(DecimalX value) => (ulong)((IntegerX)value);
+        public static explicit operator ulong(DecimalX value) => (ulong)(IntegerX)value;
 
         public static explicit operator IntegerX(DecimalX value) => Rescale(value, 0, RoundingMode.Down)._coeff;
         #endregion
@@ -1109,7 +1106,7 @@ namespace BigNumberX
         public static DecimalX Modulus(DecimalX x, DecimalX y, MathContext c) => x.Modulus(y, c);
 
         /// <summary>
-        /// Compute the quotient and remainder of dividing one <see cref="TDecimalX"/> by another.
+        /// Compute the quotient and remainder of dividing one <see cref="DecimalX"/> by another.
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -1118,7 +1115,7 @@ namespace BigNumberX
         public static DecimalX DivRem(DecimalX x, DecimalX y, out DecimalX remainder) => x.DivRem(y, out remainder);
 
         /// <summary>
-        /// Compute the quotient and remainder of dividing one <see cref="TDecimalX"/> by another, with result rounded according to the context.
+        /// Compute the quotient and remainder of dividing one <see cref="DecimalX"/> by another, with result rounded according to the context.
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -1218,7 +1215,7 @@ namespace BigNumberX
         {
             var tempRes = Add(y);
 
-            if ((c.Precision == 0) || (c.RoundingMode == RoundingMode.Unnecessary))
+            if (c.Precision == 0 || c.RoundingMode == RoundingMode.Unnecessary)
                 return tempRes;
 
             return tempRes.Round(c);
@@ -1247,7 +1244,7 @@ namespace BigNumberX
         {
             var tempRes = Subtract(y);
 
-            if ((c.Precision == 0) || (c.RoundingMode == RoundingMode.Unnecessary))
+            if (c.Precision == 0 || c.RoundingMode == RoundingMode.Unnecessary)
                 return tempRes;
 
             return tempRes.Round(c);
@@ -1313,7 +1310,7 @@ namespace BigNumberX
             }
 
             // Calculate preferred exponent
-            preferredExp = (int)(Math.Max(Math.Min((long)dividend._exp - divisor._exp, MaxIntValue), MinIntValue));
+            preferredExp = (int)Math.Max(Math.Min((long)dividend._exp - divisor._exp, MaxIntValue), MinIntValue);
 
             if (dividend._coeff.IsZero())
                 return new DecimalX(IntegerX.Zero, preferredExp);
@@ -1327,7 +1324,7 @@ namespace BigNumberX
             * mode.
             */
 
-            c = new MathContext((uint)Math.Min(dividend.Precision + (long)(Math.Ceiling(10.0 * divisor.Precision / 3.0)), MaxIntValue), RoundingMode.Unnecessary);
+            c = new MathContext((uint)Math.Min(dividend.Precision + (long)Math.Ceiling(10.0 * divisor.Precision / 3.0), MaxIntValue), RoundingMode.Unnecessary);
 
             try
             {
@@ -1421,7 +1418,7 @@ namespace BigNumberX
             }
 
             if (lhs._coeff.IsZero())
-                return new DecimalX(IntegerX.Zero, (int)(Math.Max(Math.Min(preferredExp, MaxIntValue), MinIntValue)));
+                return new DecimalX(IntegerX.Zero, (int)Math.Max(Math.Min(preferredExp, MaxIntValue), MinIntValue));
 
             xprec = (int)lhs.Precision;
             yprec = (int)rhs.Precision;
@@ -1539,7 +1536,7 @@ namespace BigNumberX
             int preferredExp, tempResExp;
             DecimalX tempRes, product;
 
-            if ((c.Precision == 0) || /* exact result */ (Abs().CompareTo(y.Abs()) < 0))
+            if (c.Precision == 0 || /* exact result */ Abs().CompareTo(y.Abs()) < 0)
                 return DivideInteger(y);
 
             preferredExp = 0;
@@ -1558,7 +1555,7 @@ namespace BigNumberX
                 tempRes = Rescale(tempRes, 0, RoundingMode.Down);
             }
 
-            if ((preferredExp < tempResExp) && ((int)(c.Precision - tempRes.Precision) > 0))
+            if (preferredExp < tempResExp && (int)(c.Precision - tempRes.Precision) > 0)
                 return Rescale(tempRes, 0, RoundingMode.Unnecessary);
             else
                 return tempRes.StripZerosToMatchExponent(preferredExp);
@@ -1583,10 +1580,10 @@ namespace BigNumberX
             if (Abs().CompareTo(y.Abs()) < 0)
                 return new DecimalX(IntegerX.Zero, preferredExp);
 
-            if ((_coeff.IsZero()) && (!y._coeff.IsZero()))
+            if (_coeff.IsZero() && !y._coeff.IsZero())
                 return Rescale(this, preferredExp, RoundingMode.Unnecessary);
 
-            maxDigits = (int)(Math.Min(Precision + (long)(Math.Ceiling(10.0 * y.Precision / 3.0)) + Math.Abs((long)_exp - y._exp), MaxIntValue));
+            maxDigits = (int)Math.Min(Precision + (long)Math.Ceiling(10.0 * y.Precision / 3.0) + Math.Abs((long)_exp - y._exp), MaxIntValue);
 
             quotient = Divide(y, new MathContext((uint)maxDigits, RoundingMode.Down));
 
@@ -1634,7 +1631,7 @@ namespace BigNumberX
         /// <exception cref="ArithmeticException">Thrown if the exponent is negative or exceeds a certain range.</exception>
         public DecimalX Power(int n)
         {
-            if ((n < 0) || (n > 999999999))
+            if (n < 0 || n > 999999999)
                 throw new ArithmeticException("Invalid operation");
 
             var exp = CheckExponent((long)_exp * n);
@@ -1657,7 +1654,7 @@ namespace BigNumberX
         /// <item>c.precision > 0 and n has more than c.precision decimal digits</item>
         /// </list>
         /// </item>
-        /// <item>if n is zero, ONE is returned even if this is zero, otherwise
+        /// <item>if n is zero, ONE is returned even if this is zero, otherwise</item>
         /// <list>
         /// <item>if n is positive, the result is calculated via
         /// the repeated squaring technique into a single accumulator.
@@ -1686,7 +1683,7 @@ namespace BigNumberX
             if (c.Precision == 0)
                 return Power(n);
 
-            if ((n < -999999999) || (n > 999999999))
+            if (n < -999999999 || n > 999999999)
                 throw new ArithmeticException("Invalid operation");
 
             if (n == 0)
@@ -1697,7 +1694,7 @@ namespace BigNumberX
             mag = Math.Abs(n);
             if (c.Precision > 0)
             {
-                elength = (int)(IntegerX.UIntPrecision((uint)mag));
+                elength = (int)IntegerX.UIntPrecision((uint)mag);
                 if ((uint)elength > c.Precision)
                     throw new ArithmeticException("Invalid operation");
 
@@ -1793,7 +1790,7 @@ namespace BigNumberX
             }
 
             adjustedExp = (long)_exp + (coeffLen - 1);
-            if ((_exp <= 0) && (adjustedExp >= -6))
+            if (_exp <= 0 && adjustedExp >= -6)
             {
                 // not using exponential notation
                 if (_exp != 0)
@@ -1842,21 +1839,17 @@ namespace BigNumberX
             return Equals(dX);
         }
 
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
+        public override int GetHashCode() => base.GetHashCode();
 
         private DecimalX StripZerosToMatchExponent(long preferredExp)
         {
-            IntegerX rem, quo;
-
-            while ((IntegerX.Abs(_coeff).CompareTo(IntegerX.Ten) >= 0) && (_exp < preferredExp))
+            while (IntegerX.Abs(_coeff).CompareTo(IntegerX.Ten) >= 0 && _exp < preferredExp)
             {
                 if (_coeff.IsOdd())
                     break;
 
-                quo = IntegerX.DivRem(_coeff, IntegerX.Ten, out rem);
+                IntegerX rem;
+                var quo = IntegerX.DivRem(_coeff, IntegerX.Ten, out rem);
                 if (!rem.IsZero())
                     break;
 
@@ -1929,18 +1922,17 @@ namespace BigNumberX
         public static int CheckExponent(long candidate, bool isZero)
         {
             bool tempRes;
-            int Exponent;
+            int exponent;
 
-            tempRes = CheckExponent(candidate, isZero, out Exponent);
+            tempRes = CheckExponent(candidate, isZero, out exponent);
 
             if (tempRes)
-                return Exponent;
+                return exponent;
 
             // Report error condition
             if (candidate > MaxIntValue)
                 throw new ArithmeticException("Overflow in scale");
-            else
-                throw new ArithmeticException("Overflow in scale");
+            throw new ArithmeticException("Overflow in scale");
         }
 
         /// <summary>
@@ -1967,17 +1959,11 @@ namespace BigNumberX
 
             // We have underflow/overflow.
             // If Zero, use the max value of the appropriate sign.
-            if (IsZero)
-            {
-                if (candidate > MaxIntValue)
-                    Exponent = MaxIntValue;
-                else
-                    Exponent = MinIntValue;
+            if (!IsZero) return false;
+            Exponent = candidate > MaxIntValue ? MaxIntValue : MinIntValue;
 
-                return true;
-            }
+            return true;
 
-            return false;
         }
 
         public int CheckExponent(long candidate) => CheckExponent(candidate, _coeff.IsZero());
@@ -1991,16 +1977,14 @@ namespace BigNumberX
         /// <returns></returns>
         public static IntegerX RoundingDivide2(IntegerX x, IntegerX y, RoundingMode mode)
         {
-            IntegerX r, q;
-            bool increment, isNeg;
-            int cmp;
+            IntegerX r;
 
-            q = x.DivRem(y, out r);
+            var q = x.DivRem(y, out r);
 
-            increment = false;
+            var increment = false;
             if (!r.IsZero()) // we need to pay attention
             {
-                isNeg = q.IsNegative();
+                var isNeg = q.IsNegative();
 
                 switch (mode)
                 {
@@ -2019,7 +2003,7 @@ namespace BigNumberX
                         increment = true;
                         break;
                     default:
-                        cmp = (r + r).Abs().CompareTo(y);
+                        var cmp = (r + r).Abs().CompareTo(y);
                         switch (mode)
                         {
                             case RoundingMode.HalfDown:
@@ -2029,7 +2013,7 @@ namespace BigNumberX
                                 increment = cmp >= 0;
                                 break;
                             case RoundingMode.HalfEven:
-                                increment = (cmp > 0) || ((cmp == 0) && (q.TestBit(0)));
+                                increment = cmp > 0 || cmp == 0 && q.TestBit(0);
                                 break;
                         }
                         break;
@@ -2037,7 +2021,7 @@ namespace BigNumberX
 
                 if (increment)
                 {
-                    if ((q.IsNegative()) || ((q.IsZero()) && (x.IsNegative())))
+                    if (q.IsNegative() || q.IsZero() && x.IsNegative())
                         q = q - IntegerX.One;
                     else
                         q = q + IntegerX.One;
@@ -2047,28 +2031,24 @@ namespace BigNumberX
             return q;
         }
 
-        public static IntegerX BIPowerOfTen(int n)
+        private static IntegerX BIPowerOfTen(int n)
         {
-            char[] buf;
-            int i;
-            string tempStr;
-
             if (n < 0)
                 throw new ArgumentException("Power of ten must be non-negative");
 
             if (n < _maxCachedPowerOfTen)
                 return _biPowersOfTen[n];
 
-            buf = new char[n + 1];
+            var buf = new char[n + 1];
             buf[0] = '1';
-            i = 1;
+            var i = 1;
             while (i <= n)
             {
                 buf[i] = '0';
                 i++;
             }
 
-            tempStr = new string(buf);
+            var tempStr = new string(buf);
 
             return IntegerX.Parse(tempStr);
         }
@@ -2131,10 +2111,7 @@ namespace BigNumberX
 
         public bool Equals(DecimalX other)
         {
-            if (_exp != other._exp)
-                return false;
-
-            return _coeff.Equals(other._coeff);
+            return _exp == other._exp && _coeff.Equals(other._coeff);
         }
 
         /// <summary>
@@ -2167,11 +2144,6 @@ namespace BigNumberX
 
         public static DecimalX Rescale(DecimalX lhs, int newExponent, RoundingMode mode)
         {
-            int decrease;
-            uint p, newPrecision, newPrec;
-            DecimalX r;
-            IntegerX newCoeff;
-
             var delta = CheckExponent((long)lhs._exp - newExponent, false);
 
             if (delta == 0)
@@ -2182,25 +2154,22 @@ namespace BigNumberX
 
             if (delta < 0)
             {
-                decrease = -delta;
-                p = lhs.Precision;
+                var decrease = -delta;
+                var p = lhs.Precision;
 
                 if (p < (uint)decrease)
                     return new DecimalX(IntegerX.Zero, newExponent);
 
-                newPrecision = p - (uint)decrease;
-                r = lhs.Round(new MathContext(newPrecision, mode));
-                if (r._exp == newExponent)
-                    return r;
-                else
-                    return Rescale(r, newExponent, mode);
+                var newPrecision = p - (uint)decrease;
+                var r = lhs.Round(new MathContext(newPrecision, mode));
+                return r._exp == newExponent ? r : Rescale(r, newExponent, mode);
             }
 
             // decreasing the exponent (delta is positive)
             // multiply by an appropriate power of 10
             // Make sure we don't underflow
-            newCoeff = lhs._coeff * BIPowerOfTen(delta);
-            newPrec = lhs._precision;
+            var newCoeff = lhs._coeff * BIPowerOfTen(delta);
+            var newPrec = lhs._precision;
             if (newPrec != 0)
                 newPrec = newPrec + (uint)delta;
 

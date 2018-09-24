@@ -24,7 +24,7 @@ namespace BigNumberX
     /// <para>Inspired by the Microsoft.Scripting.Math.BigInteger code,
     /// the java.math.BigInteger code, but mostly by Don Knuth's Art of Computer Programming, Volume 2.</para>
     /// <para>The same as most other BigInteger representations, this implementation uses a sign/magnitude representation.</para>
-    /// <para>The magnitude is represented by an array of UInt in big-endian order.
+    /// <para>The magnitude is represented by an array of UInt in big-endian order.</para>
     /// <para>IntegerX's are immutable.</para>
     /// </remarks>
     public class IntegerX
@@ -390,7 +390,7 @@ namespace BigNumberX
         /// </remarks>
         public IntegerX(int sign, uint[] data)
         {
-            if ((sign < -1) || (sign > 1))
+            if (sign < -1 || sign > 1)
             {
                 throw new ArgumentException("Sign must be -1, 0, or +1'");
             }
@@ -508,7 +508,7 @@ namespace BigNumberX
 
             IntegerX tempRes, res;
 
-            if ((double.IsNaN(v)) || (double.IsInfinity(v)))
+            if (double.IsNaN(v) || double.IsInfinity(v))
             {
                 throw new OverflowException("Infinity/NaN not supported in IntegerX (yet)");
             }
@@ -544,11 +544,11 @@ namespace BigNumberX
                 res = Create(significand);
                 if (exp > 1075)
                 {
-                    res <<= (exp - DoubleShiftBias);
+                    res <<= exp - DoubleShiftBias;
                 }
                 else
                 {
-                    res >>= (DoubleShiftBias - exp);
+                    res >>= DoubleShiftBias - exp;
                 }
 
                 if (v < 0.0)
@@ -593,7 +593,7 @@ namespace BigNumberX
             bufLen = charBuff.Length;
             i = bufLen - 1;
 
-            while ((i >= 0) && (rem != 0))
+            while (i >= 0 && rem != 0)
             {
                 digit = rem % radix;
                 rem /= radix;
@@ -627,15 +627,15 @@ namespace BigNumberX
         {
             v = MaxUIntValue;
 
-            if (('0' <= c) && (c <= '9'))
+            if ('0' <= c && c <= '9')
             {
                 v = (uint)(c - '0');
             }
-            else if (('a' <= c) && (c <= 'z'))
+            else if ('a' <= c && c <= 'z')
             {
                 v = (uint)(10 + c - 'a');
             }
-            else if (('A' <= c) && (c <= 'Z'))
+            else if ('A' <= c && c <= 'Z')
             {
                 v = (uint)(10 + c - 'A');
             }
@@ -651,7 +651,6 @@ namespace BigNumberX
         /// <returns><value>-1</value> if the first is less than second; <value>0</value> if equal; <value>+1</value> if greater</returns>
         private static short Compare(uint[] x, uint[] y)
         {
-            int i;
             var xlen = x.Length;
             var ylen = y.Length;
 
@@ -665,7 +664,7 @@ namespace BigNumberX
                 return 1;
             }
 
-            i = 0;
+            var i = 0;
 
             while (i < xlen)
             {
@@ -847,7 +846,7 @@ namespace BigNumberX
                     b = t;
                 }
 
-                if((a.AsUInt(out x)) && (b.AsUInt(out y)))
+                if(a.AsUInt(out x) && b.AsUInt(out y))
                 {
                     x = BinaryGcd(x, y);
                     t = Create(x);
@@ -922,11 +921,11 @@ namespace BigNumberX
         /// <returns>leading zero bit count.</returns>
         private static uint LeadingZeroCount(uint x)
         {
-            x |= (x >> 1);
-            x |= (x >> 2);
-            x |= (x >> 4);
-            x |= (x >> 8);
-            x |= (x >> 16);
+            x |= x >> 1;
+            x |= x >> 2;
+            x |= x >> 4;
+            x |= x >> 8;
+            x |= x >> 16;
 
             return 32 - BitCount(x);
         }
@@ -938,11 +937,11 @@ namespace BigNumberX
         /// <returns></returns>
         private static uint BitCount(uint x)
         {
-            x -= ((x >> 1) & 0x55555555);
+            x -= (x >> 1) & 0x55555555;
             x = ((x >> 2) & 0x33333333) + (x & 0x33333333);
             x = ((x >> 4) + x) & 0x0F0F0F0F;
-            x += (x >> 8);
-            x += (x >> 16);
+            x += x >> 8;
+            x += x >> 16;
             return x & 0x0000003F;
         }
 
@@ -960,7 +959,7 @@ namespace BigNumberX
             }
 
             j = _data.Length - 1;
-            while ((j > 0) && (_data[j] == 0))
+            while (j > 0 && _data[j] == 0)
             {
                 j--;
             }
@@ -1008,12 +1007,10 @@ namespace BigNumberX
         /// is a little-endian two's complement representation.
         /// </summary>
         /// <param name="n">The index of the digit to retrieve</param>
-        /// <param name="seenNonZero">Set to true if a nonZero byte is seen</param>
+        /// <param name="seenNoneZero">Set to true if a nonZero byte is seen</param>
         /// <returns>The UInt at the given index.</returns>
         private uint Get2CDigit(int n, ref bool seenNoneZero)
         {
-            uint digit;
-
             if (n < 0)
             {
                 return 0;
@@ -1024,7 +1021,7 @@ namespace BigNumberX
                 return Get2CSignExtensionDigit();
             }
 
-            digit = _data[_data.Length - n - 1];
+            var digit = _data[_data.Length - n - 1];
             if (_sign >= 0)
             {
                 return digit;
@@ -1034,33 +1031,22 @@ namespace BigNumberX
             {
                 return ~digit;
             }
-            else
+
+            if (digit == 0)
             {
-                if (digit == 0)
-                {
-                    return 0;
-                }
-                else
-                {
-                    seenNoneZero = true;
-                    return ~digit + 1;
-                }
+                return 0;
             }
+
+            seenNoneZero = true;
+            return ~digit + 1;
         }
 
         /// <summary>
         /// Returns an UInt of all zeros or all ones depending on the sign (pos, neg).
         /// </summary>
         /// <returns>The UInt corresponding to the sign</returns>
-        private uint Get2CSignExtensionDigit()
-        {
-            if (_sign < 0)
-            {
-                return MaxUIntValue;
-            }
-            return 0;
-        }
-
+        private uint Get2CSignExtensionDigit() => _sign < 0 ? MaxUIntValue : 0;
+        
         /// <summary>
         /// Returns the index of the first nonzero digit (there must be one), pretending the value is little-endian.
         /// </summary>
@@ -1068,7 +1054,7 @@ namespace BigNumberX
         private int FirstNonzero2CDigitIndex()
         {
             var i = _data.Length - 1;
-            while ((i >= 0) && (_data[i] == 0))
+            while (i >= 0 && _data[i] == 0)
             {
                 i--;
             }
@@ -1083,12 +1069,9 @@ namespace BigNumberX
         /// <returns></returns>
         private static uint[] MakeTwosComplement(uint[] a)
         {
-            int i;
-            uint digit;
-
-            i = a.Length - 1;
-            digit = 0;
-            while ((i >= 0) && (digit == 0))
+            var i = a.Length - 1;
+            uint digit = 0;
+            while (i >= 0 && digit == 0)
             {
                 digit = ~a[i] + 1;
                 a[i] = digit;
@@ -1112,22 +1095,18 @@ namespace BigNumberX
         /// <returns></returns>
         private static uint[] Add(uint[] x, uint[] y)
         {
-            uint[] temp, tempRes;
-            int xi, yi;
-            ulong sum;
-
             if (x.Length < y.Length)
             {
-                temp = x;
+                var temp = x;
                 x = y;
                 y = temp;
             }
 
-            xi = x.Length;
-            yi = y.Length;
+            var xi = x.Length;
+            var yi = y.Length;
 
-            tempRes = new uint[xi];
-            sum = 0;
+            var tempRes = new uint[xi];
+            ulong sum = 0;
 
             while (yi > 0)
             {
@@ -1138,7 +1117,7 @@ namespace BigNumberX
             }
 
             sum >>= (int)BitsPerDigit;
-            while ((xi > 0) && (sum != 0))
+            while (xi > 0 && sum != 0)
             {
                 xi--;
                 sum = (ulong)x[xi] + 1;
@@ -1191,30 +1170,24 @@ namespace BigNumberX
         /// <returns></returns>
         private static uint[] Subtract(uint[] xs, uint[] ys)
         {
-            int xlen, ylen, ix, iy;
-            uint[] tempRes;
-            bool borrow;
-            uint x, y;
-
             // Assume xs > ys
-            xlen = xs.Length;
-            ylen = ys.Length;
-            tempRes = new uint[xlen];
+            var xlen = xs.Length;
+            var ylen = ys.Length;
+            var tempRes = new uint[xlen];
 
-            borrow = false;
-            ix = xlen - 1;
-            iy = ylen - 1;
+            var borrow = false;
+            var ix = xlen - 1;
+            var iy = ylen - 1;
 
             while (iy >= 0)
             {
-                x = xs[ix];
-                y = ys[iy];
+                var x = xs[ix];
+                var y = ys[iy];
                 if (borrow)
                 {
                     if (x == 0)
                     {
                         x = 0xFFFFFFFF;
-                        borrow = true;
                     }
                     else
                     {
@@ -1223,13 +1196,13 @@ namespace BigNumberX
                     }
                 }
 
-                borrow = borrow || (y > x);
+                borrow = borrow || y > x;
                 tempRes[ix] = x - y;
                 iy--;
                 ix--;
             }
 
-            while ((borrow) && (ix >= 0))
+            while (borrow && ix >= 0)
             {
                 tempRes[ix] = xs[ix] - 1;
                 borrow = tempRes[ix] == 0xFFFFFFFF;
@@ -1253,21 +1226,17 @@ namespace BigNumberX
         /// <returns></returns>
         private static uint[] Multiply(uint[] xs, uint[] ys)
         {
-            int xlen, ylen, xi, zi, yi;
-            uint[] zs;
-            ulong x, product;
-
-            xlen = xs.Length;
-            ylen = ys.Length;
-            zs = new uint[xlen + ylen];
-            xi = xlen - 1;
+            var xlen = xs.Length;
+            var ylen = ys.Length;
+            var zs = new uint[xlen + ylen];
+            var xi = xlen - 1;
 
             while (xi >= 0)
             {
-                x = xs[xi];
-                zi = xi + ylen;
-                product = 0;
-                yi = ylen - 1;
+                ulong x = xs[xi];
+                var zi = xi + ylen;
+                ulong product = 0;
+                var yi = ylen - 1;
 
                 while (yi >= 0)
                 {
@@ -1294,7 +1263,7 @@ namespace BigNumberX
         }
 
         /// <summary>
-        /// Return the quotient and remainder of dividing one <see cref="TIntegerX"/> by another.
+        /// Return the quotient and remainder of dividing one <see cref="IntegerX"/> by another.
         /// </summary>
         /// <param name="x">The dividend</param>
         /// <param name="y">The divisor</param>
@@ -1303,22 +1272,16 @@ namespace BigNumberX
         /// <remarks>Algorithm D in Knuth 4.3.1.</remarks>
         private static void DivMod(uint[] x, uint[] y, out uint[] q, out uint[] r)
         {
-            const ulong SuperB = 0x100000000;
+            const ulong superB = 0x100000000;
 
-            int ylen, xlen, cmp, shift, j, k, i;
-            uint rem;
-            ulong toptwo, qhat, rhat, val, carry;
-            long borrow, temp;
-            uint[] xnorm, ynorm;
-
-            ylen = y.Length;
+            var ylen = y.Length;
 
             if (ylen == 0)
             {
                 throw new DivideByZeroException();
             }
 
-            xlen = x.Length;
+            var xlen = x.Length;
 
             if (xlen == 0)
             {
@@ -1327,7 +1290,7 @@ namespace BigNumberX
                 return;
             }
 
-            cmp = Compare(x, y);
+            int cmp = Compare(x, y);
 
             if (cmp == 0)
             {
@@ -1346,30 +1309,30 @@ namespace BigNumberX
 
             if (ylen == 1)
             {
-                rem = CopyDivRem(x, y[0], out q);
-                r = new uint[] { rem };
+                var rem = CopyDivRem(x, y[0], out q);
+                r = new[] { rem };
                 return;
             }
 
-            shift = (int)LeadingZeroCount(y[0]);
-            xnorm = new uint[xlen + 1];
-            ynorm = new uint[ylen];
+            var shift = (int)LeadingZeroCount(y[0]);
+            var xnorm = new uint[xlen + 1];
+            var ynorm = new uint[ylen];
 
             Normalize(ref xnorm, xlen + 1, x, xlen, shift);
             Normalize(ref ynorm, ylen, y, ylen, shift);
             q = new uint[xlen - ylen + 1];
             r = null;
 
-            j = 0;
-            while (j <= (xlen - ylen))
+            var j = 0;
+            while (j <= xlen - ylen)
             {
-                toptwo = xnorm[j] * SuperB + xnorm[j + 1];
-                qhat = toptwo / ynorm[0];
-                rhat = toptwo % ynorm[0];
+                var toptwo = xnorm[j] * superB + xnorm[j + 1];
+                var qhat = toptwo / ynorm[0];
+                var rhat = toptwo % ynorm[0];
 
                 while (true)
                 {
-                    if ((qhat < SuperB) && ((qhat * ynorm[1]) <= (SuperB * rhat + xnorm[j + 2])))
+                    if (qhat < superB && qhat * ynorm[1] <= superB * rhat + xnorm[j + 2])
                     {
                         break;
                     }
@@ -1377,19 +1340,21 @@ namespace BigNumberX
                     qhat--;
                     rhat += (ulong)ynorm[0];
 
-                    if (rhat >= SuperB)
+                    if (rhat >= superB)
                     {
                         break;
                     }
                 }
 
-                borrow = 0;
-                k = ylen - 1;
+                long borrow = 0;
+                var k = ylen - 1;
 
+                int i;
+                long temp;
                 while (k >= 0)
                 {
                     i = j + k + 1;
-                    val = ynorm[k] * qhat;
+                    var val = ynorm[k] * qhat;
                     temp = (long)(xnorm[i] - (long)(uint)val - borrow);
                     xnorm[i] = (uint)temp;
                     val >>= (int)BitsPerDigit;
@@ -1406,7 +1371,7 @@ namespace BigNumberX
                 if (temp < 0)
                 {
                     q[j]--;
-                    carry = 0;
+                    ulong carry = 0;
                     k = ylen - 1;
 
                     while (k >= 0)
@@ -1495,7 +1460,7 @@ namespace BigNumberX
             carry = sum >> (int)BitsPerDigit;
             i = len - 2;
 
-            while ((i >= 0) && (carry > 0))
+            while (i >= 0 && carry > 0)
             {
                 sum = data[i] + carry;
                 data[i] = (uint)sum;
@@ -1516,7 +1481,7 @@ namespace BigNumberX
 
             len = data.Length;
             index = 0;
-            while ((index < len) && (data[index] == 0))
+            while (index < len && data[index] == 0)
             {
                 index++;
             }
@@ -1528,7 +1493,7 @@ namespace BigNumberX
 
             tempRes = new uint[len - index];
             i = 0;
-            while (i < (len - index))
+            while (i < len - index)
             {
                 tempRes[i] = data[index + i];
                 i++;
@@ -1544,12 +1509,12 @@ namespace BigNumberX
             byteLength = a.Length;
             keep = 0;
 
-            while ((keep < byteLength) && (a[keep] == 0))
+            while (keep < byteLength && a[keep] == 0)
             {
                 keep++;
             }
 
-            intLength = ((byteLength - keep) + 3) >> 2;
+            intLength = (byteLength - keep + 3) >> 2;
             result = new uint[intLength];
             b = byteLength - 1;
 
@@ -1562,7 +1527,7 @@ namespace BigNumberX
                 bytesToTransfer = Math.Min(3, bytesRemaining);
                 j = 8;
 
-                while (j <= (bytesToTransfer << 3))
+                while (j <= bytesToTransfer << 3)
                 {
                     result[i] |= (uint)((a[b] & 0xFF) << j);
                     b--;
@@ -1582,13 +1547,13 @@ namespace BigNumberX
             byteLength = a.Length;
             keep = 0;
 
-            while ((keep < byteLength) && ((sbyte)a[keep] == -1))
+            while (keep < byteLength && (sbyte)a[keep] == -1)
             {
                 keep++;
             }
 
             k = keep;
-            while ((k < byteLength) && ((sbyte)a[k] == 0))
+            while (k < byteLength && (sbyte)a[k] == 0)
             {
                 k++;
             }
@@ -1602,7 +1567,7 @@ namespace BigNumberX
                 extraByte = 0;
             }
 
-            intLength = ((byteLength - keep + extraByte) + 3) / 4;
+            intLength = (byteLength - keep + extraByte + 3) / 4;
             result = new uint[intLength];
 
             b = byteLength - 1;
@@ -1628,7 +1593,7 @@ namespace BigNumberX
                 }
 
                 mask = -1 >> (8 * (3 - numBytesToTransfer));
-                result[i] = (~result[i]) & (uint)mask;
+                result[i] = ~result[i] & (uint)mask;
                 i--;
             }
 
@@ -1771,7 +1736,7 @@ namespace BigNumberX
             var mlen = _data.Length;
             var i = mlen - 1;
 
-            while ((i >= 0) && (_data[i] == 0))
+            while (i >= 0 && _data[i] == 0)
             {
                 i--;
             }
@@ -1849,7 +1814,7 @@ namespace BigNumberX
 
             var chArray = s.ToCharArray();
 
-            if ((radix < MinRadix) || (radix > MaxRadix))
+            if (radix < MinRadix || radix > MaxRadix)
             {
                 v = default(IntegerX);
                 return false;
@@ -1860,7 +1825,7 @@ namespace BigNumberX
 
             minusIndex = s.LastIndexOf('-');
             plusIndex = s.LastIndexOf('+');
-            if ((len == 0) || ((minusIndex == 0) && (len == 1)) || ((plusIndex == 0) && (len == 1)) || (minusIndex > 0) || (plusIndex > 0))
+            if (len == 0 || minusIndex == 0 && len == 1 || plusIndex == 0 && len == 1 || minusIndex > 0 || plusIndex > 0)
             {
                 v = default(IntegerX);
                 return false;
@@ -1877,7 +1842,7 @@ namespace BigNumberX
                 index = 1;
             }
 
-            while ((index < len) && (s[index] == '0'))
+            while (index < len && s[index] == '0')
             {
                 index++;
             }
@@ -1951,7 +1916,7 @@ namespace BigNumberX
                     return false;
                 }
 
-                tempRes = (tempRes * (uint)radix) + v;
+                tempRes = tempRes * (uint)radix + v;
                 if (tempRes > MaxUIntValue)
                 {
                     return false;
@@ -1984,7 +1949,7 @@ namespace BigNumberX
             var i1 = v[0] | (uint)(v[1] << 8) | (uint)(v[2] << 16) | (uint)(v[3] << 24);
             var i2 = v[4] | (uint)(v[5] << 8) | (uint)((v[6] & 0xF) << 16);
 
-            return (i1 | ((ulong)i2 << 32));
+            return i1 | ((ulong)i2 << 32);
         }
 
         /// <summary>
@@ -2924,7 +2889,7 @@ namespace BigNumberX
                 i++;
             }
 
-            if ((IsNegative()) && (y.IsNegative()))
+            if (IsNegative() && y.IsNegative())
             {
                 return new IntegerX(-1, RemoveLeadingZeros(MakeTwosComplement(tempRes)));
             }
@@ -2958,7 +2923,7 @@ namespace BigNumberX
                 i++;
             }
 
-            if ((IsNegative()) || (y.IsNegative()))
+            if (IsNegative() || y.IsNegative())
             {
                 return new IntegerX(-1, RemoveLeadingZeros(MakeTwosComplement(tempRes)));
             }
@@ -3044,11 +3009,11 @@ namespace BigNumberX
             {
                 xdigit = Get2CDigit(i, ref seenNonZeroX);
                 ydigit = y.Get2CDigit(i, ref seenNonZeroY);
-                tempRes[rlen - i - 1] = xdigit & (~ydigit);
+                tempRes[rlen - i - 1] = xdigit & ~ydigit;
                 i++;
             }
 
-            if ((IsNegative()) && (y.IsPositive()))
+            if (IsNegative() && y.IsPositive())
             {
                 return new IntegerX(-1, MakeTwosComplement(tempRes));
             }
@@ -3103,7 +3068,7 @@ namespace BigNumberX
                 i++;
             }
 
-            tempRes[len - index - 1] |= ((uint)1 << (n % 32));
+            tempRes[len - index - 1] |= (uint)1 << (n % 32);
 
             if (IsNegative())
             {
@@ -3144,7 +3109,7 @@ namespace BigNumberX
                 i++;
             }
 
-            tempRes[len - index - 1] &= (~((uint)1 << (n % 32)));
+            tempRes[len - index - 1] &= ~((uint)1 << (n % 32));
 
             if (IsNegative())
             {
@@ -3184,7 +3149,7 @@ namespace BigNumberX
                 i++;
             }
 
-            tempRes[len - index - 1] ^= ((uint)1 << (n % 32));
+            tempRes[len - index - 1] ^= (uint)1 << (n % 32);
 
             if (IsNegative())
             {
@@ -3370,7 +3335,7 @@ namespace BigNumberX
                         return false;
                     }
 
-                    if ((_data[0] == (uint)0x80000000) && (_sign == 1))
+                    if (_data[0] == (uint)0x80000000 && _sign == 1)
                     {
                         return false;
                     }
@@ -3405,7 +3370,7 @@ namespace BigNumberX
                     {
                         return false;
                     }
-                    if ((tmp == 0x8000000000000000) && (_sign == 1))
+                    if (tmp == 0x8000000000000000 && _sign == 1)
                     {
                         return false;
                     }
@@ -3462,7 +3427,7 @@ namespace BigNumberX
                     ret = (ulong)_data[0];
                     return true;
                 case 2:
-                    ret = ((ulong)_data[1]) | ((ulong)_data[0] << 32);
+                    ret = (ulong)_data[1] | ((ulong)_data[0] << 32);
                     return true;
                 default:
                     return false;
@@ -3477,7 +3442,7 @@ namespace BigNumberX
         public byte toByte()
         {
             uint ret;
-            if ((AsUInt(out ret)) && (ret <= 0xFF))
+            if (AsUInt(out ret) && ret <= 0xFF)
             {
                 return (byte)ret;
             }
@@ -3493,7 +3458,7 @@ namespace BigNumberX
         public short toShort()
         {
             int ret;
-            if ((AsInt(out ret)) && (MinShortValue <= ret) && (ret <= MaxShortValue))
+            if (AsInt(out ret) && MinShortValue <= ret && ret <= MaxShortValue)
             {
                 return (short)ret;
             }
@@ -3508,7 +3473,7 @@ namespace BigNumberX
         public sbyte toSByte()
         {
             int ret;
-            if ((AsInt(out ret)) && (MinSByteValue <= ret) && (ret <= MaxSByteValue))
+            if (AsInt(out ret) && MinSByteValue <= ret && ret <= MaxSByteValue)
             {
                 return (sbyte)ret;
             }
@@ -3523,7 +3488,7 @@ namespace BigNumberX
         public ushort toUShort()
         {
             uint ret;
-            if ((AsUInt(out ret)) && (ret <= MaxUShortValue))
+            if (AsUInt(out ret) && ret <= MaxUShortValue)
             {
                 return (ushort)ret;
             }
@@ -3666,7 +3631,7 @@ namespace BigNumberX
             StringBuilder sb;
             char[] charBuf;
 
-            if ((radix < MinRadix) || (radix > MaxRadix))
+            if (radix < MinRadix || radix > MaxRadix)
             {
                 throw new ArgumentOutOfRangeException(string.Format(_FS, "Radix {0} is out of range. MinRadix = {1}, MaxRadix = {2}", radix, MinRadix, MaxRadix));
             }
@@ -3736,7 +3701,7 @@ namespace BigNumberX
         /// <summary>
         /// Return true if this instance has an odd value.
         /// </summary>
-        public bool IsOdd() => ((_data != null) && (_data.Length > 0) && ((_data[_data.Length - 1] & 1) != 0));
+        public bool IsOdd() => _data != null && _data.Length > 0 && (_data[_data.Length - 1] & 1) != 0;
 
         /// <summary>
         /// Returns the magnitude as a big-endian array of UInt.
@@ -3770,7 +3735,7 @@ namespace BigNumberX
                 {
                     pow2 = BitCount(m[0]) == 1;
                     i = 1;
-                    while ((i < len) && (pow2))
+                    while (i < len && pow2)
                     {
                         pow2 = m[i] == 0;
                         i++;

@@ -182,7 +182,7 @@ namespace BigNumberX
 
         public bool Equals(MathContext other)
         {
-            return ((other._precision == _precision) && (other._roundingMode == _roundingMode));
+            return other._precision == _precision && other._roundingMode == _roundingMode;
         }
 
         public override string ToString()
