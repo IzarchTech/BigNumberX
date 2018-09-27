@@ -24,27 +24,27 @@ namespace BigNumberX
         /// <summary>
         /// Temporary Variable to Hold <c>BASIC_DEFAULT </c><see cref="MathContext" />.
         /// </summary>
-        private static MathContext BASIC_DEFAULTX;
+        private static readonly MathContext BASIC_DEFAULTX;
 
         /// <summary>
         /// Temporary Variable to Hold <c>Decimal32 </c><see cref="MathContext" />.
         /// </summary>
-        private static MathContext Decimal32X;
+        private static readonly MathContext Decimal32X;
 
         /// <summary>
         /// Temporary Variable to Hold <c>Decimal64 </c><see cref="MathContext" />.
         /// </summary>
-        private static MathContext Decimal64X;
+        private static readonly MathContext Decimal64X;
 
         /// <summary>
         /// Temporary Variable to Hold <c>Decimal128 </c><see cref="MathContext" />.
         /// </summary>
-        private static MathContext Decimal128X;
+        private static readonly MathContext Decimal128X;
 
         /// <summary>
         /// Temporary Variable to Hold <c>Unlimited </c><see cref="MathContext" />.
         /// </summary>
-        private static MathContext UnlimitedX;
+        private static readonly MathContext UnlimitedX;
         #endregion
 
         #region FIELD & PROPERTIES
@@ -162,7 +162,7 @@ namespace BigNumberX
         #endregion
 
         #region OPERATOR OVERLOADS
-        public static bool operator ==(MathContext c1, MathContext c2) => c1.Equals(c2);
+        public static bool operator ==(MathContext c1, MathContext c2) => c1 != null && c1.Equals(c2);
 
         public static bool operator !=(MathContext c1, MathContext c2) => !(c1 == c2); 
         #endregion
@@ -171,13 +171,13 @@ namespace BigNumberX
         /// A custom function to create a <see cref="MathContext" /> by supplying
         /// only a Precision. It uses an already defined RoundingMode= <see cref="HalfEven" />
         /// </summary>
-        /// <param name="Precision">
+        /// <param name="precision">
         /// Precision to Use
         /// </param>
         /// <returns>A <see cref="MathContext" /> with specified parameters.</returns>
-        public static MathContext ExtendedDefault(uint Precision)
+        public static MathContext ExtendedDefault(uint precision)
         {
-            return new MathContext(Precision, RoundingMode.HalfEven);
+            return new MathContext(precision, RoundingMode.HalfEven);
         }
 
         public bool Equals(MathContext other)
@@ -197,9 +197,7 @@ namespace BigNumberX
             if (obj == null)
                 return false;
             MathContext mth = obj as MathContext;
-            if (mth == null)
-                return false;
-            return Equals(mth);
+            return mth != null && Equals(mth);
         }
 
         public override int GetHashCode()

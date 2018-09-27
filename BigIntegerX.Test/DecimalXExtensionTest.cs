@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BigIntegerX.Test
+namespace BigNumberX.Test
 {
     [TestFixture]
     public class DecimalXExtensionTest

@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using BigNumberX;
 
-namespace BigIntegerX.Test
+namespace BigNumberX.Test
 {
     /// <summary>
     /// Tests for DecimalX operations
