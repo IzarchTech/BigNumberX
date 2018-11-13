@@ -7,8 +7,8 @@
     <ProjectGuid>{4A08C28B-F785-492B-AE21-640A4F608E08}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BigIntegerX.Test</RootNamespace>
-    <AssemblyName>BigIntegerX.Test</AssemblyName>
+    <RootNamespace>BigNumberX.Test</RootNamespace>
+    <AssemblyName>BigNumberX.Test</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
