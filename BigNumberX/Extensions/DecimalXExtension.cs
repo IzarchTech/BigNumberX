@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Runtime.CompilerServices;
 
 namespace BigNumberX
 {
@@ -152,7 +149,8 @@ namespace BigNumberX
             {
                 return DecimalX.Create(1);
             }
-            else if (x.Signum() == -1)
+
+            if (x.Signum() == -1)
             {
                 var a = DecimalX.Create(1);
                 return a.CDivide(x.Negate().Exp(scale), scale, RoundingMode.HalfEven);
@@ -197,7 +195,6 @@ namespace BigNumberX
         /// </summary>
         public static DecimalX Ln(this DecimalX x, int scale)
         {
-            DecimalX a;
             // Check that scale > 0.
             if (scale <= 0)
                 throw new ArgumentException(InvalidScale2);
@@ -221,7 +218,7 @@ namespace BigNumberX
             var lnRoot = lnNewton(root, scale);
 
             // magnitude*ln(x^(1/magnitude))
-            a = DecimalX.Create(magnitude);
+            var a = DecimalX.Create(magnitude);
             var result = a.Multiply(lnRoot);
             return DecimalX.Rescale(result, -scale, RoundingMode.HalfEven);
 
@@ -331,9 +328,8 @@ namespace BigNumberX
         private static DecimalX lnNewton(DecimalX x, int scale)
         {
             DecimalX term;
-            int sp1;
 
-            sp1 = scale + 1;
+            var sp1 = scale + 1;
             var n = x;
 
             // Convergence tolerance = 5*(10^-(scale+1))

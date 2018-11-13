@@ -30,6 +30,7 @@ namespace BigNumberX
     public class IntegerX
     {
         #region PRIVATE VARIABLES
+
         /// <summary>
         /// <see cref="CultureInfo" /> used in <see cref="IntegerX" />.
         /// </summary>
@@ -89,6 +90,7 @@ namespace BigNumberX
         #endregion
 
         #region CONST VARIABLES
+
         /// <summary>
         /// The number of bits in one 'digit' of the magnitude.
         /// </summary>
@@ -152,6 +154,7 @@ namespace BigNumberX
         #endregion
 
         #region PRIVATE STATIC VARIABLES
+
         /// <summary>
         /// UIntLogTable
         /// </summary>
@@ -190,6 +193,7 @@ namespace BigNumberX
         #endregion
 
         #region PROPS
+
         /// <summary>
         /// Support for DecimalX, to compute precision
         /// </summary>
@@ -230,20 +234,15 @@ namespace BigNumberX
         /// </summary>
         public static IntegerX Zero
         {
-            get
-            {
-                return ZeroX;
-            }
+            get { return ZeroX; }
         }
 
         /// <summary>
         /// A Positive One.
         /// </summary>
-        public static IntegerX One {
-             get
-            {
-                return OneX;
-            }
+        public static IntegerX One
+        {
+            get { return OneX; }
         }
 
         /// <summary>
@@ -251,10 +250,7 @@ namespace BigNumberX
         /// </summary>
         public static IntegerX Two
         {
-            get
-            {
-                return TwoX;
-            }
+            get { return TwoX; }
         }
 
         /// <summary>
@@ -262,10 +258,7 @@ namespace BigNumberX
         /// </summary>
         public static IntegerX Five
         {
-            get
-            {
-                return FiveX;
-            }
+            get { return FiveX; }
         }
 
         /// <summary>
@@ -273,10 +266,7 @@ namespace BigNumberX
         /// </summary>
         public static IntegerX Ten
         {
-            get
-            {
-                return TenX;
-            }
+            get { return TenX; }
         }
 
         /// <summary>
@@ -284,63 +274,81 @@ namespace BigNumberX
         /// </summary>
         public static IntegerX NegativeOne
         {
-            get
-            {
-                return NegativeOneX;
-            }
+            get { return NegativeOneX; }
         }
+
         #endregion
 
         #region STATIC CONSTRUCTOR
+
         static IntegerX()
         {
             // Create a Zero IntegerX (a big integer with value as Zero)
             ZeroX = new IntegerX(0, new uint[0]);
 
             // Create a One IntegerX (a big integer with value as One)
-            OneX = new IntegerX(1, new uint[] { 1 });
+            OneX = new IntegerX(1, new uint[] {1});
 
             // Create a Two IntegerX (a big integer with value as Two)
-            TwoX = new IntegerX(1, new uint[] { 2 });
+            TwoX = new IntegerX(1, new uint[] {2});
 
             // Create a Five IntegerX (a big integer with value as Five)
-            FiveX = new IntegerX(1, new uint[] { 5 });
+            FiveX = new IntegerX(1, new uint[] {5});
 
             // Create a Ten IntegerX (a big integer with value as Ten)
-            TenX = new IntegerX(1, new uint[] { 10 });
+            TenX = new IntegerX(1, new uint[] {10});
 
             // Create a NegativeOne IntegerX (a big integer with value as NegativeOne)
-            NegativeOneX = new IntegerX(-1, new uint[] { 1 });
+            NegativeOneX = new IntegerX(-1, new uint[] {1});
 
             _FS = CultureInfo.CurrentCulture;
 
-            UIntLogTable = new uint[] { 0, 9, 99, 999, 9999, 99999, 999999, 9999999, 99999999, 999999999, MaxUIntValue };
+            UIntLogTable = new uint[] {0, 9, 99, 999, 9999, 99999, 999999, 9999999, 99999999, 999999999, MaxUIntValue};
 
-            RadixDigitsPerDigit = new int[] { 0, 0, 31, 20, 15, 13, 12, 11, 10, 10, 9, 9, 8, 8, 8, 8, 7, 7, 7, 7, 7, 7,
-                7, 7, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6 };
+            RadixDigitsPerDigit = new int[]
+            {
+                0, 0, 31, 20, 15, 13, 12, 11, 10, 10, 9, 9, 8, 8, 8, 8, 7, 7, 7, 7, 7, 7,
+                7, 7, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6
+            };
 
-            SuperRadix = new uint[] { 0, 0, 0x80000000, 0xCFD41B91, 0x40000000, 0x48C27395, 0x81BF1000, 0x75DB9C97,
+            SuperRadix = new uint[]
+            {
+                0, 0, 0x80000000, 0xCFD41B91, 0x40000000, 0x48C27395, 0x81BF1000, 0x75DB9C97,
                 0x40000000, 0xCFD41B91, 0x3B9ACA00, 0x8C8B6D2B, 0x19A10000, 0x309F1021, 0x57F6C100, 0x98C29B81,
                 0x10000000, 0x18754571, 0x247DBC80, 0x3547667B, 0x4C4B4000, 0x6B5A6E1D, 0x94ACE180, 0xCAF18367,
-                0xB640000, 0xE8D4A51, 0x1269AE40, 0x17179149, 0x1CB91000, 0x23744899, 0x2B73A840, 0x34E63B41, 0x40000000,
-                0x4CFA3CC1, 0x5C13D840, 0x6D91B519, 0x81BF1000};
+                0xB640000, 0xE8D4A51, 0x1269AE40, 0x17179149, 0x1CB91000, 0x23744899, 0x2B73A840, 0x34E63B41,
+                0x40000000,
+                0x4CFA3CC1, 0x5C13D840, 0x6D91B519, 0x81BF1000
+            };
 
-            BitsPerRadixDigit = new int[] { 0, 0, 1024, 1624, 2048, 2378, 2648, 2875, 3072, 3247, 3402, 3543, 3672, 3790,
-                3899, 4001, 4096, 4186, 4271, 4350, 4426, 4498, 4567, 4633, 4696, 4756, 4814, 4870, 4923, 4975, 5025, 5074,
-                5120, 5166, 5210, 5253, 5295 };
+            BitsPerRadixDigit = new int[]
+            {
+                0, 0, 1024, 1624, 2048, 2378, 2648, 2875, 3072, 3247, 3402, 3543, 3672, 3790,
+                3899, 4001, 4096, 4186, 4271, 4350, 4426, 4498, 4567, 4633, 4696, 4756, 4814, 4870, 4923, 4975, 5025,
+                5074,
+                5120, 5166, 5210, 5253, 5295
+            };
 
-            TrailingZerosTable = new byte[] { 0, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 5, 0, 1, 0, 2,
-                0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 6, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 4, 0, 1, 0, 2, 0, 1,
-                0, 3, 0, 1, 0, 2, 0, 1, 0, 5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 7, 0, 1, 0, 2, 0, 1, 0, 3,
-                0, 1, 0, 2, 0, 1, 0, 4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1,
-                0, 2, 0, 1, 0, 6, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2,
-                0, 1, 0, 4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0 };
-
-
+            TrailingZerosTable = new byte[]
+            {
+                0, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 5, 0, 1,
+                0, 2,
+                0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 6, 0, 1, 0, 2, 0, 1, 0,
+                3, 0, 1, 0, 2, 0, 1, 0, 4, 0, 1, 0, 2, 0, 1,
+                0, 3, 0, 1, 0, 2, 0, 1, 0, 5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 4, 0, 1, 0, 2, 0, 1, 0, 3, 0,
+                1, 0, 2, 0, 1, 0, 7, 0, 1, 0, 2, 0, 1, 0, 3,
+                0, 1, 0, 2, 0, 1, 0, 4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0,
+                2, 0, 1, 0, 4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1,
+                0, 2, 0, 1, 0, 6, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0,
+                1, 0, 5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2,
+                0, 1, 0, 4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0
+            };
         }
+
         #endregion
 
         #region PUBLIC CONSTRUCTORS
+
         /// <summary>
         /// Creates a copy of a <see cref="IntegerX"/>.
         /// </summary>
@@ -358,7 +366,7 @@ namespace BigNumberX
                 throw new Exception("Zero length BigInteger");
             }
 
-            if ((sbyte)val[0] < 0)
+            if ((sbyte) val[0] < 0)
             {
                 _data = MakePositive(val);
                 _sign = -1;
@@ -405,7 +413,7 @@ namespace BigNumberX
                 throw new ArgumentException("Zero sign on non-zero data");
             }
 
-            _sign = (short)sign;
+            _sign = (short) sign;
             _data = data;
         }
 
@@ -425,16 +433,15 @@ namespace BigNumberX
             if (v == 0)
                 return Zero;
 
-            most = (uint)(v >> (int)BitsPerDigit);
+            most = (uint) (v >> (int) BitsPerDigit);
             if (most == 0)
             {
-                return new IntegerX(1, new uint[]{ (uint)v });
+                return new IntegerX(1, new uint[] {(uint) v});
             }
             else
             {
-                return new IntegerX(1, new uint[] { most, (uint)v });
+                return new IntegerX(1, new uint[] {most, (uint) v});
             }
-
         }
 
         /// <summary>
@@ -447,7 +454,7 @@ namespace BigNumberX
             if (v == 0)
                 return Zero;
             else
-                return new IntegerX(1, new uint[] { v });
+                return new IntegerX(1, new uint[] {v});
         }
 
         /// <summary>
@@ -472,18 +479,17 @@ namespace BigNumberX
                     Sign = -1;
                     v = -v;
                 }
-                
-                most = (uint)(v >> (int)BitsPerDigit);
+
+                most = (uint) (v >> (int) BitsPerDigit);
                 if (most == 0)
                 {
-                    return new IntegerX(Sign, new uint[] { (uint)v });
+                    return new IntegerX(Sign, new uint[] {(uint) v});
                 }
                 else
                 {
-                    return new IntegerX(Sign, new uint[] { most, (uint)v });
+                    return new IntegerX(Sign, new uint[] {most, (uint) v});
                 }
             }
-
         }
 
         /// <summary>
@@ -491,7 +497,7 @@ namespace BigNumberX
         /// </summary>
         /// <param name="v">The value</param>
         /// <returns>A <see cref="IntegerX"/>.</returns>
-        public static IntegerX Create(int v) => Create((long)v);
+        public static IntegerX Create(int v) => Create((long) v);
 
         /// <summary>
         /// Create a <see cref="IntegerX"/> from a double value.
@@ -560,7 +566,6 @@ namespace BigNumberX
                     return res;
                 }
             }
-            
         }
 
         /// <summary>
@@ -579,25 +584,22 @@ namespace BigNumberX
         /// <param name="sb">The <see cref="StringBuilder"/> to append characters to</param>
         /// <param name="rem">The 'super digit' value to be converted to its string representation</param>
         /// <param name="radix">The radix for the conversion</param>
-        /// <param name="charBuf">A character buffer used for temporary storage, big enough to hold the string
+        /// <param name="charBuff">A character buffer used for temporary storage, big enough to hold the string
         /// representation of <paramref name="rem"/></param>
         /// <param name="leadingZeros">Whether or not to pad with the leading zeros if the value is not large enough to fill the buffer</param>
         /// <remarks>Pretty much identical to DLR BigInteger.AppendRadix</remarks>
         private static void AppendDigit(ref StringBuilder sb, uint rem, uint radix, char[] charBuff, bool leadingZeros)
         {
             const string symbols = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-             
-            int i, bufLen;
-            uint digit;
 
-            bufLen = charBuff.Length;
-            i = bufLen - 1;
+            var bufLen = charBuff.Length;
+            var i = bufLen - 1;
 
             while (i >= 0 && rem != 0)
             {
-                digit = rem % radix;
+                var digit = rem % radix;
                 rem /= radix;
-                charBuff[i] = symbols[(int)digit];
+                charBuff[i] = symbols[(int) digit];
                 i--;
             }
 
@@ -608,6 +610,7 @@ namespace BigNumberX
                     charBuff[i] = '0';
                     i--;
                 }
+
                 sb.Append(charBuff);
             }
             else
@@ -629,18 +632,18 @@ namespace BigNumberX
 
             if ('0' <= c && c <= '9')
             {
-                v = (uint)(c - '0');
+                v = (uint) (c - '0');
             }
             else if ('a' <= c && c <= 'z')
             {
-                v = (uint)(10 + c - 'a');
+                v = (uint) (10 + c - 'a');
             }
             else if ('A' <= c && c <= 'Z')
             {
-                v = (uint)(10 + c - 'A');
+                v = (uint) (10 + c - 'A');
             }
 
-            return v < (uint)radix;
+            return v < (uint) radix;
         }
 
         /// <summary>
@@ -672,10 +675,12 @@ namespace BigNumberX
                 {
                     return -1;
                 }
+
                 if (x[i] > y[i])
                 {
                     return 1;
                 }
+
                 i++;
             }
 
@@ -692,7 +697,6 @@ namespace BigNumberX
         /// the same length, then switches to a binary gcd algorithm.</remarks>
         private static IntegerX HybridGcd(IntegerX a, IntegerX b)
         {
-            IntegerX r;
             while (b._data.Length != 0)
             {
                 if (Math.Abs(a._data.Length - b._data.Length) < 2)
@@ -700,6 +704,7 @@ namespace BigNumberX
                     return BinaryGcd(a, b);
                 }
 
+                IntegerX r;
                 a.DivRem(b, out r);
                 a = b;
                 b = r;
@@ -716,8 +721,7 @@ namespace BigNumberX
         /// <returns>The greatest common divisor</returns>
         private static uint BinaryGcd(uint a, uint b)
         {
-            int y, aZeros, bZeros, t;
-            uint x;
+            int t;
 
             //From Knuth, 4.5.5, Algorithm B
             if (b == 0)
@@ -730,8 +734,8 @@ namespace BigNumberX
                 return b;
             }
 
-            aZeros = 0;
-            x = a & 0xFF;
+            var aZeros = 0;
+            var x = a & 0xFF;
             while (x == 0)
             {
                 a >>= 8;
@@ -739,11 +743,11 @@ namespace BigNumberX
                 x = a & 0xFF;
             }
 
-            y = TrailingZerosTable[x];
+            int y = TrailingZerosTable[x];
             aZeros += y;
             a >>= y;
 
-            bZeros = 0;
+            var bZeros = 0;
             x = b & 0xFF;
             while (x == 0)
             {
@@ -755,14 +759,7 @@ namespace BigNumberX
             y = TrailingZerosTable[x];
             bZeros += y;
             b >>= y;
-            if (aZeros < bZeros)
-            {
-                t = aZeros;
-            }
-            else
-            {
-                t = bZeros;
-            }
+            t = aZeros < bZeros ? aZeros : bZeros;
 
             while (a != b)
             {
@@ -787,6 +784,7 @@ namespace BigNumberX
                         b >>= 8;
                         x = b & 0xFF;
                     }
+
                     b >>= TrailingZerosTable[x];
                 }
             }
@@ -804,9 +802,8 @@ namespace BigNumberX
         /// </remarks>
         private static IntegerX BinaryGcd(IntegerX a, IntegerX b)
         {
-            int tsign, lb;
+            int tsign;
             IntegerX t;
-            uint x, y;
 
             //From Knuth, 4.5.5, Algorithm B
             //Step B1: Find power of 2
@@ -831,13 +828,13 @@ namespace BigNumberX
                 tsign = 1;
             }
 
-            lb = t.GetLowestSetBit();
+            var lb = t.GetLowestSetBit();
             while (lb >= 0)
             {
                 //Steps B3 and B4 halve t until not even
                 t = t.RightShift(lb);
                 //Steps B5: reset max(u, v)
-                if(tsign > 0)
+                if (tsign > 0)
                 {
                     a = t;
                 }
@@ -846,11 +843,13 @@ namespace BigNumberX
                     b = t;
                 }
 
-                if(a.AsUInt(out x) && b.AsUInt(out y))
+                uint x;
+                uint y;
+                if (a.AsUInt(out x) && b.AsUInt(out y))
                 {
                     x = BinaryGcd(x, y);
                     t = Create(x);
-                    if(k > 0)
+                    if (k > 0)
                     {
                         t = t.LeftShift(k);
                         return t;
@@ -873,6 +872,7 @@ namespace BigNumberX
                     tsign = -1;
                     t = t.Abs();
                 }
+
                 lb = t.GetLowestSetBit();
             }
 
@@ -880,6 +880,7 @@ namespace BigNumberX
             {
                 a = a.LeftShift(k);
             }
+
             return a;
         }
 
@@ -890,7 +891,7 @@ namespace BigNumberX
         /// <returns>The number of trailing zero bits </returns>
         private static int TrailingZerosCount(uint val)
         {
-            uint byteVal = val & 0xFF;
+            var byteVal = val & 0xFF;
             if (byteVal != 0)
             {
                 return TrailingZerosTable[byteVal];
@@ -975,8 +976,6 @@ namespace BigNumberX
         /// <returns>The uint at the given index.</returns>
         private uint Get2CDigit(int n)
         {
-            uint digit;
-
             if (n < 0)
             {
                 return 0;
@@ -987,7 +986,7 @@ namespace BigNumberX
                 return Get2CSignExtensionDigit();
             }
 
-            digit = _data[_data.Length - n - 1];
+            var digit = _data[_data.Length - n - 1];
 
             if (_sign >= 0)
             {
@@ -1046,7 +1045,7 @@ namespace BigNumberX
         /// </summary>
         /// <returns>The UInt corresponding to the sign</returns>
         private uint Get2CSignExtensionDigit() => _sign < 0 ? MaxUIntValue : 0;
-        
+
         /// <summary>
         /// Returns the index of the first nonzero digit (there must be one), pretending the value is little-endian.
         /// </summary>
@@ -1112,17 +1111,17 @@ namespace BigNumberX
             {
                 xi--;
                 yi--;
-                sum = (sum >> (int)BitsPerDigit) + x[xi] + y[yi];
-                tempRes[xi] = (uint)sum;
+                sum = (sum >> (int) BitsPerDigit) + x[xi] + y[yi];
+                tempRes[xi] = (uint) sum;
             }
 
-            sum >>= (int)BitsPerDigit;
+            sum >>= (int) BitsPerDigit;
             while (xi > 0 && sum != 0)
             {
                 xi--;
-                sum = (ulong)x[xi] + 1;
-                tempRes[xi] = (uint)sum;
-                sum >>= (int)BitsPerDigit;
+                sum = (ulong) x[xi] + 1;
+                tempRes[xi] = (uint) sum;
+                sum >>= (int) BitsPerDigit;
             }
 
             while (xi > 0)
@@ -1133,7 +1132,7 @@ namespace BigNumberX
 
             if (sum != 0)
             {
-                tempRes = AddSignificantDigit(tempRes, (uint)sum);
+                tempRes = AddSignificantDigit(tempRes, (uint) sum);
             }
 
             return tempRes;
@@ -1147,12 +1146,9 @@ namespace BigNumberX
         /// <returns></returns>
         private static uint[] AddSignificantDigit(uint[] x, uint newDigit)
         {
-            uint[] tempRes;
-            int i;
-
-            tempRes = new uint[x.Length + 1];
+            var tempRes = new uint[x.Length + 1];
             tempRes[0] = newDigit;
-            i = 0;
+            var i = 0;
             while (i < x.Length)
             {
                 tempRes[i + 1] = x[i];
@@ -1241,8 +1237,8 @@ namespace BigNumberX
                 while (yi >= 0)
                 {
                     product = product + x * ys[yi] + zs[zi];
-                    zs[zi] = (uint)product;
-                    product >>= (int)BitsPerDigit;
+                    zs[zi] = (uint) product;
+                    product >>= (int) BitsPerDigit;
 
                     yi--;
                     zi--;
@@ -1251,9 +1247,9 @@ namespace BigNumberX
                 while (product != 0)
                 {
                     product += zs[zi];
-                    zs[zi] = (uint)product;
+                    zs[zi] = (uint) product;
                     zi++;
-                    product >>= (int)BitsPerDigit;
+                    product >>= (int) BitsPerDigit;
                 }
 
                 xi--;
@@ -1294,8 +1290,8 @@ namespace BigNumberX
 
             if (cmp == 0)
             {
-                q = new uint[] { 1 };
-                r = new uint[] { 0 };
+                q = new uint[] {1};
+                r = new uint[] {0};
                 return;
             }
 
@@ -1310,11 +1306,11 @@ namespace BigNumberX
             if (ylen == 1)
             {
                 var rem = CopyDivRem(x, y[0], out q);
-                r = new[] { rem };
+                r = new[] {rem};
                 return;
             }
 
-            var shift = (int)LeadingZeroCount(y[0]);
+            var shift = (int) LeadingZeroCount(y[0]);
             var xnorm = new uint[xlen + 1];
             var ynorm = new uint[ylen];
 
@@ -1338,7 +1334,7 @@ namespace BigNumberX
                     }
 
                     qhat--;
-                    rhat += (ulong)ynorm[0];
+                    rhat += (ulong) ynorm[0];
 
                     if (rhat >= superB)
                     {
@@ -1355,18 +1351,18 @@ namespace BigNumberX
                 {
                     i = j + k + 1;
                     var val = ynorm[k] * qhat;
-                    temp = xnorm[i] - (long)(uint)val - borrow;
-                    xnorm[i] = (uint)temp;
-                    val >>= (int)BitsPerDigit;
-                    temp = temp >> (int)BitsPerDigit;
-                    borrow = (long)val - temp;
+                    temp = xnorm[i] - (long) (uint) val - borrow;
+                    xnorm[i] = (uint) temp;
+                    val >>= (int) BitsPerDigit;
+                    temp = temp >> (int) BitsPerDigit;
+                    borrow = (long) val - temp;
                     k--;
                 }
 
                 temp = xnorm[j] - borrow;
-                xnorm[j] = (uint)temp;
+                xnorm[j] = (uint) temp;
 
-                q[j] = (uint)qhat;
+                q[j] = (uint) qhat;
 
                 if (temp < 0)
                 {
@@ -1377,17 +1373,19 @@ namespace BigNumberX
                     while (k >= 0)
                     {
                         i = j + k + 1;
-                        carry = (ulong)ynorm[k] + xnorm[i] + carry;
-                        xnorm[i] = (uint)carry;
-                        carry >>= (int)BitsPerDigit;
+                        carry = (ulong) ynorm[k] + xnorm[i] + carry;
+                        xnorm[i] = (uint) carry;
+                        carry >>= (int) BitsPerDigit;
                         k--;
                     }
 
-                    carry += (ulong)xnorm[j];
-                    xnorm[j] = (uint)carry;
+                    carry += (ulong) xnorm[j];
+                    xnorm[j] = (uint) carry;
                 }
+
                 j++;
             }
+
             Unnormalize(xnorm, out r, shift);
         }
 
@@ -1415,7 +1413,7 @@ namespace BigNumberX
             }
             else
             {
-                var lShift = (int)BitsPerDigit - shift;
+                var lShift = (int) BitsPerDigit - shift;
                 uint carry = 0;
                 i = 0;
 
@@ -1439,30 +1437,28 @@ namespace BigNumberX
         /// <param name="addend">The value to add in</param>
         private static void InPlaceMulAdd(ref uint[] data, uint mult, uint addend)
         {
-            ulong sum, product, carry;
-
             var len = data.Length;
-            carry = 0;
+            ulong carry = 0;
             var i = len - 1;
 
             while (i >= 0)
             {
-                product = (ulong)data[i] * mult + carry;
-                data[i] = (uint)product;
-                carry = product >> (int)BitsPerDigit;
+                var product = (ulong) data[i] * mult + carry;
+                data[i] = (uint) product;
+                carry = product >> (int) BitsPerDigit;
                 i--;
             }
 
-            sum = (ulong)data[len - 1] + addend;
-            data[len - 1] = (uint)sum;
-            carry = sum >> (int)BitsPerDigit;
+            var sum = (ulong) data[len - 1] + addend;
+            data[len - 1] = (uint) sum;
+            carry = sum >> (int) BitsPerDigit;
             i = len - 2;
 
             while (i >= 0 && carry > 0)
             {
                 sum = data[i] + carry;
-                data[i] = (uint)sum;
-                carry = sum >> (int)BitsPerDigit;
+                data[i] = (uint) sum;
+                carry = sum >> (int) BitsPerDigit;
                 i--;
             }
         }
@@ -1474,11 +1470,8 @@ namespace BigNumberX
         /// <returns>A (possibly new) UInt array with leading zero UInt's removed.</returns>
         private static uint[] RemoveLeadingZeros(uint[] data)
         {
-            int len, index, i;
-            uint[] tempRes;
-
-            len = data.Length;
-            index = 0;
+            var len = data.Length;
+            var index = 0;
             while (index < len && data[index] == 0)
             {
                 index++;
@@ -1489,8 +1482,8 @@ namespace BigNumberX
                 return data;
             }
 
-            tempRes = new uint[len - index];
-            i = 0;
+            var tempRes = new uint[len - index];
+            var i = 0;
             while (i < len - index)
             {
                 tempRes[i] = data[index + i];
@@ -1502,32 +1495,30 @@ namespace BigNumberX
 
         private static uint[] StripLeadingZeroBytes(byte[] a)
         {
-            int byteLength, keep, intLength, b, i, bytesRemaining, bytesToTransfer, j;
-            uint[] result;
-            byteLength = a.Length;
-            keep = 0;
+            var byteLength = a.Length;
+            var keep = 0;
 
             while (keep < byteLength && a[keep] == 0)
             {
                 keep++;
             }
 
-            intLength = (byteLength - keep + 3) >> 2;
-            result = new uint[intLength];
-            b = byteLength - 1;
+            var intLength = (byteLength - keep + 3) >> 2;
+            var result = new uint[intLength];
+            var b = byteLength - 1;
 
-            i = intLength - 1;
+            var i = intLength - 1;
             while (i >= 0)
             {
-                result[i] = (uint)(a[b] & 0xFF);
+                result[i] = (uint) (a[b] & 0xFF);
                 b--;
-                bytesRemaining = b - keep + 1;
-                bytesToTransfer = Math.Min(3, bytesRemaining);
-                j = 8;
+                var bytesRemaining = b - keep + 1;
+                var bytesToTransfer = Math.Min(3, bytesRemaining);
+                var j = 8;
 
                 while (j <= bytesToTransfer << 3)
                 {
-                    result[i] |= (uint)((a[b] & 0xFF) << j);
+                    result[i] |= (uint) ((a[b] & 0xFF) << j);
                     b--;
                     j += 8;
                 }
@@ -1540,22 +1531,21 @@ namespace BigNumberX
 
         private static uint[] MakePositive(byte[] a)
         {
-            int extraByte;
             var byteLength = a.Length;
             var keep = 0;
 
-            while (keep < byteLength && (sbyte)a[keep] == -1)
+            while (keep < byteLength && (sbyte) a[keep] == -1)
             {
                 keep++;
             }
 
             var k = keep;
-            while (k < byteLength && (sbyte)a[k] == 0)
+            while (k < byteLength && (sbyte) a[k] == 0)
             {
                 k++;
             }
 
-            extraByte = k == byteLength ? 1 : 0;
+            var extraByte = k == byteLength ? 1 : 0;
 
             var intLength = (byteLength - keep + extraByte + 3) / 4;
             var result = new uint[intLength];
@@ -1563,35 +1553,35 @@ namespace BigNumberX
             var b = byteLength - 1;
             var i = intLength - 1;
 
-            while(i >= 0)
+            while (i >= 0)
             {
-                result[i] = (uint)(a[b] & 0xFF);
+                result[i] = (uint) (a[b] & 0xFF);
                 b--;
                 var numBytesToTransfer = Math.Min(3, b - keep + 1);
 
-                if(numBytesToTransfer < 0)
+                if (numBytesToTransfer < 0)
                 {
                     numBytesToTransfer = 0;
                 }
 
                 var j = 8;
-                while(j <= 8 * numBytesToTransfer)
+                while (j <= 8 * numBytesToTransfer)
                 {
-                    result[i] |= (uint)((a[b] & 0xFF) << j);
+                    result[i] |= (uint) ((a[b] & 0xFF) << j);
                     b--;
                     j += 8;
                 }
 
                 var mask = -1 >> (8 * (3 - numBytesToTransfer));
-                result[i] = ~result[i] & (uint)mask;
+                result[i] = ~result[i] & (uint) mask;
                 i--;
             }
 
             i = result.Length - 1;
-            while(i >= 0)
+            while (i >= 0)
             {
                 result[i] = (result[i] & 0xFFFFFFFF) + 1;
-                if(result[i] != 0)
+                if (result[i] != 0)
                 {
                     break;
                 }
@@ -1618,13 +1608,13 @@ namespace BigNumberX
             var len = data.Length;
             var i = index;
 
-            while(i < len)
+            while (i < len)
             {
-                rem = rem << (int)BitsPerDigit;
+                rem = rem << (int) BitsPerDigit;
                 rem = rem | data[i];
-                var q = (uint)(rem / divisor);
+                var q = (uint) (rem / divisor);
                 data[i] = q;
-                if(q  == 0)
+                if (q == 0)
                 {
                     if (!seenNonZero)
                     {
@@ -1640,7 +1630,7 @@ namespace BigNumberX
                 i++;
             }
 
-            return (uint)rem;
+            return (uint) rem;
         }
 
         /// <summary>
@@ -1653,54 +1643,54 @@ namespace BigNumberX
         private static uint CopyDivRem(uint[] data, uint divisor, out uint[] quotient)
         {
             quotient = new uint[data.Length];
-            uint q;
-            var rem = (ulong)0;
+            var rem = (ulong) 0;
             var len = data.Length;
             var i = 0;
 
             while (i < len)
             {
-                rem <<= (int)BitsPerDigit;
+                rem <<= (int) BitsPerDigit;
                 rem |= data[i];
-                q = (uint)(rem / divisor);
+                var q = (uint) (rem / divisor);
                 quotient[i] = q;
                 rem %= divisor;
                 i++;
             }
 
             quotient = RemoveLeadingZeros(quotient);
-            return (uint)rem;
+            return (uint) rem;
         }
 
         private int SignInt()
         {
-            if(Signum() < 0)
+            if (Signum() < 0)
             {
                 return -1;
             }
+
             return 0;
         }
 
         private int GetInt(int n)
         {
-            if(n < 0)
+            if (n < 0)
             {
                 return 0;
             }
 
-            if(n >= _data.Length)
+            if (n >= _data.Length)
             {
                 return SignInt();
             }
 
             var magInt = (int) _data[_data.Length - n - 1];
 
-            if(Signum() >= 0)
+            if (Signum() >= 0)
             {
                 return magInt;
             }
 
-            if(n <= FirstNonzeroIntNum())
+            if (n <= FirstNonzeroIntNum())
             {
                 return -magInt;
             }
@@ -1731,7 +1721,7 @@ namespace BigNumberX
         /// <exception cref="Exception">Thrown if there is a bad minus sign (more than one or not leading)
         /// or if one of the digits in the string is not valid for the given radix.</exception>
         public static IntegerX Parse(string x) => Parse(x, 10);
-        
+
 
         /// <summary>
         /// Create a <see cref="IntegerX"/> from a string representation in the given radix.
@@ -1751,7 +1741,6 @@ namespace BigNumberX
             }
 
             throw new Exception("Invalid input format");
-
         }
 
         /// <summary>
@@ -1793,7 +1782,8 @@ namespace BigNumberX
 
             var minusIndex = s.LastIndexOf('-');
             var plusIndex = s.LastIndexOf('+');
-            if (len == 0 || minusIndex == 0 && len == 1 || plusIndex == 0 && len == 1 || minusIndex > 0 || plusIndex > 0)
+            if (len == 0 || minusIndex == 0 && len == 1 || plusIndex == 0 && len == 1 || minusIndex > 0 ||
+                plusIndex > 0)
             {
                 v = default(IntegerX);
                 return false;
@@ -1823,7 +1813,7 @@ namespace BigNumberX
 
             var numDigits = len - index;
             var numBits = ((numDigits * BitsPerRadixDigit[radix]) >> 10) + 1;
-            var numUints = (int)((numBits + BitsPerDigit - 1) / BitsPerDigit);
+            var numUints = (int) ((numBits + BitsPerDigit - 1) / BitsPerDigit);
 
             var data = new uint[numUints];
 
@@ -1834,6 +1824,7 @@ namespace BigNumberX
             {
                 firstGroupLen = groupSize;
             }
+
             if (!TryParseUInt(s, index, firstGroupLen, radix, out data[data.Length - 1]))
             {
                 v = default(IntegerX);
@@ -1885,7 +1876,7 @@ namespace BigNumberX
                     return false;
                 }
 
-                tempRes = tempRes * (uint)radix + v;
+                tempRes = tempRes * (uint) radix + v;
                 if (tempRes > MaxUIntValue)
                 {
                     return false;
@@ -1894,7 +1885,7 @@ namespace BigNumberX
                 i++;
             }
 
-            u = (uint)tempRes;
+            u = (uint) tempRes;
             return true;
         }
 
@@ -1915,10 +1906,10 @@ namespace BigNumberX
         /// <returns>The significand</returns>
         public static ulong GetDoubleSignificand(byte[] v)
         {
-            var i1 = v[0] | (uint)(v[1] << 8) | (uint)(v[2] << 16) | (uint)(v[3] << 24);
-            var i2 = v[4] | (uint)(v[5] << 8) | (uint)((v[6] & 0xF) << 16);
+            var i1 = v[0] | (uint) (v[1] << 8) | (uint) (v[2] << 16) | (uint) (v[3] << 24);
+            var i2 = v[4] | (uint) (v[5] << 8) | (uint) ((v[6] & 0xF) << 16);
 
-            return i1 | ((ulong)i2 << 32);
+            return i1 | ((ulong) i2 << 32);
         }
 
         /// <summary>
@@ -1928,7 +1919,7 @@ namespace BigNumberX
         /// <returns>The exponent</returns>
         public static ushort GetDoubleBiasedExponent(byte[] v)
         {
-            return (ushort)(((ushort)(v[7] & 0x7F) << 4) | ((ushort)(v[6] & 0xF0) >> 4));
+            return (ushort) (((ushort) (v[7] & 0x7F) << 4) | ((ushort) (v[6] & 0xF0) >> 4));
         }
 
         /// <summary>
@@ -1938,15 +1929,14 @@ namespace BigNumberX
         /// <returns>The Precision</returns>
         public static uint UIntPrecision(uint v)
         {
-            uint i;
-
-            i = 1;
+            uint i = 1;
             while (true)
             {
                 if (v <= UIntLogTable[i])
                 {
                     return i;
                 }
+
                 i++;
             }
         }
@@ -1966,19 +1956,10 @@ namespace BigNumberX
         /// </remarks>
         public static void Normalize(ref uint[] xnorm, int xnlen, uint[] x, int xlen, int shift)
         {
-            bool sameLen;
-            int offset, rShift, i;
-            uint carry, xi;
+            int i;
 
-            sameLen = xnlen == xlen;
-            if (sameLen)
-            {
-                offset = 0;
-            }
-            else
-            {
-                offset = 1;
-            }
+            var sameLen = xnlen == xlen;
+            var offset = sameLen ? 0 : 1;
 
             if (shift == 0)
             {
@@ -1993,16 +1974,17 @@ namespace BigNumberX
                     xnorm[i + offset] = x[i];
                     i++;
                 }
+
                 return;
             }
 
-            rShift = (int)BitsPerDigit - shift;
-            carry = 0;
+            var rShift = (int) BitsPerDigit - shift;
+            uint carry = 0;
             i = xlen - 1;
 
             while (i >= 0)
             {
-                xi = x[i];
+                var xi = x[i];
                 xnorm[i + offset] = (xi << shift) | carry;
                 carry = xi >> rShift;
                 i--;
@@ -2022,12 +2004,13 @@ namespace BigNumberX
         }
 
         #region OPERATORS
+
         /// <summary>
         /// Implicitly convert from byte to <see cref="IntegerX"/>.
         /// </summary>
         /// <param name="v">The value to convert</param>
         /// <returns>The equivalent <see cref="IntegerX"/></returns>
-        public static implicit operator IntegerX(byte v) => Create((uint)v);
+        public static implicit operator IntegerX(byte v) => Create((uint) v);
 
         /// <summary>
         /// Implicitly convert from sbyte to <see cref="IntegerX"/>.
@@ -2048,7 +2031,7 @@ namespace BigNumberX
         /// </summary>
         /// <param name="v">The value to convert</param>
         /// <returns>The equivalent <see cref="IntegerX"/></returns>
-        public static implicit operator IntegerX(ushort v) => Create((uint)v);
+        public static implicit operator IntegerX(ushort v) => Create((uint) v);
 
         /// <summary>
         /// Implicitly convert from uint to <see cref="IntegerX"/>.
@@ -2103,8 +2086,9 @@ namespace BigNumberX
 
             if (self.AsInt(out tmp))
             {
-                return (byte)tmp;
+                return (byte) tmp;
             }
+
             throw new OverflowException("Value can't fit in specified type");
         }
 
@@ -2119,8 +2103,9 @@ namespace BigNumberX
 
             if (self.AsInt(out tmp))
             {
-                return (sbyte)tmp;
+                return (sbyte) tmp;
             }
+
             throw new OverflowException("Value can't fit in specified type");
         }
 
@@ -2135,10 +2120,10 @@ namespace BigNumberX
 
             if (self.AsInt(out tmp))
             {
-                return (ushort)tmp;
+                return (ushort) tmp;
             }
-            throw new OverflowException("Value can't fit in specified type");
 
+            throw new OverflowException("Value can't fit in specified type");
         }
 
         /// <summary>
@@ -2152,10 +2137,10 @@ namespace BigNumberX
 
             if (self.AsInt(out tmp))
             {
-                return (short)tmp;
+                return (short) tmp;
             }
-            throw new OverflowException("Value can't fit in specified type");
 
+            throw new OverflowException("Value can't fit in specified type");
         }
 
         /// <summary>
@@ -2171,8 +2156,8 @@ namespace BigNumberX
             {
                 return tmp;
             }
-            throw new OverflowException("Value can't fit in specified type");
 
+            throw new OverflowException("Value can't fit in specified type");
         }
 
         /// <summary>
@@ -2188,8 +2173,8 @@ namespace BigNumberX
             {
                 return tmp;
             }
-            throw new OverflowException("Value can't fit in specified type");
 
+            throw new OverflowException("Value can't fit in specified type");
         }
 
         /// <summary>
@@ -2205,6 +2190,7 @@ namespace BigNumberX
             {
                 return tmp;
             }
+
             throw new OverflowException("Value can't fit in specified type");
         }
 
@@ -2221,6 +2207,7 @@ namespace BigNumberX
             {
                 return tmp;
             }
+
             throw new OverflowException("Value can't fit in specified type");
         }
 
@@ -2243,17 +2230,10 @@ namespace BigNumberX
         public override bool Equals(object obj)
         {
             var temp = obj as IntegerX;
-            if (temp == null)
-            {
-                return false;
-            }
-            return Equals(temp);
+            return temp != null && Equals(temp);
         }
 
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
+        public override int GetHashCode() => base.GetHashCode();
 
         /// <summary>
         /// Compare two <see cref="IntegerX"/>'s for &lt;.
@@ -2410,7 +2390,6 @@ namespace BigNumberX
         /// Compute the negation of <paramref name="x"/>.
         /// </summary>
         /// <param name="x"></param>
-        /// <param name="y"></param>
         /// <returns>The negation</returns>
         public static IntegerX Negate(IntegerX x) => x.Negate();
 
@@ -2439,7 +2418,7 @@ namespace BigNumberX
         public static IntegerX Modulo(IntegerX x, IntegerX y) => x.Modulo(y);
 
         /// <summary>
-        /// Compute the quotient and remainder of dividing one <see cref="TIntegerX"/> by another.
+        /// Compute the quotient and remainder of dividing one <see cref="IntegerX"/> by another.
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -2522,7 +2501,7 @@ namespace BigNumberX
         /// Returns  <paramref name="x"/> << <paramref name="shift"/>.
         /// </summary>
         /// <param name="x"></param>
-        /// <param name="y"></param>
+        /// <param name="shift"></param>
         /// <returns></returns>
         public static IntegerX LeftShift(IntegerX x, int shift) => x.LeftShift(shift);
 
@@ -2573,8 +2552,6 @@ namespace BigNumberX
         /// <returns>The sum</returns>
         public IntegerX Add(IntegerX y)
         {
-            int c;
-
             if (_sign == 0)
             {
                 return y;
@@ -2584,21 +2561,19 @@ namespace BigNumberX
             {
                 return new IntegerX(_sign, Add(_data, y._data));
             }
-            else
-            {
-                c = Compare(_data, y._data);
 
-                switch (c)
-                {
-                    case -1:
-                        return new IntegerX(-_sign, Subtract(y._data, _data));
-                    case 0:
-                        return new IntegerX(Zero);
-                    case 1:
-                        return new IntegerX(_sign, Subtract(_data, y._data));
-                    default:
-                        throw new InvalidOperationException("Bogus result from Compare");
-                }
+            int c = Compare(_data, y._data);
+
+            switch (c)
+            {
+                case -1:
+                    return new IntegerX(-_sign, Subtract(y._data, _data));
+                case 0:
+                    return new IntegerX(Zero);
+                case 1:
+                    return new IntegerX(_sign, Subtract(_data, y._data));
+                default:
+                    throw new InvalidOperationException("Bogus result from Compare");
             }
         }
 
@@ -2609,7 +2584,6 @@ namespace BigNumberX
         /// <returns>The difference</returns>
         public IntegerX Subtract(IntegerX y)
         {
-            int cmp;
             uint[] mag;
 
             if (y._sign == 0)
@@ -2627,21 +2601,14 @@ namespace BigNumberX
                 return new IntegerX(_sign, Add(_data, y._data));
             }
 
-            cmp = Compare(_data, y._data);
+            int cmp = Compare(_data, y._data);
             if (cmp == 0)
             {
                 return Zero;
             }
 
-            if (cmp > 0)
-            {
-                mag = Subtract(_data, y._data);
-            }
-            else
-            {
-                mag = Subtract(y._data, _data);
-            }
-            
+            mag = cmp > 0 ? Subtract(_data, y._data) : Subtract(y._data, _data);
+
             return new IntegerX(cmp * _sign, mag);
         }
 
@@ -2658,8 +2625,6 @@ namespace BigNumberX
         /// <returns>The product</returns>
         public IntegerX Multiply(IntegerX y)
         {
-            uint[] mag;
-
             if (_sign == 0)
             {
                 return Zero;
@@ -2670,7 +2635,7 @@ namespace BigNumberX
                 return Zero;
             }
 
-            mag = Multiply(_data, y._data);
+            var mag = Multiply(_data, y._data);
             return new IntegerX(_sign * y._sign, mag);
         }
 
@@ -2717,11 +2682,7 @@ namespace BigNumberX
         /// <returns>The absolute value</returns>
         public IntegerX Abs()
         {
-            if (_sign > -0)
-            {
-                return this;
-            }
-            return Negate();
+            return _sign > -0 ? this : Negate();
         }
 
         /// <summary>
@@ -2755,10 +2716,12 @@ namespace BigNumberX
                 {
                     tempRes *= mult;
                 }
+
                 if (exp == 1)
                 {
                     break;
                 }
+
                 mult *= mult;
                 exp >>= 1;
             }
@@ -2922,8 +2885,6 @@ namespace BigNumberX
         /// <returns>The bitwise complement</returns>
         public IntegerX OnesComplement()
         {
-            uint xdigit;
-
             var len = _data.Length;
             var tempRes = new uint[len];
             var seenNonZero = false;
@@ -2931,7 +2892,7 @@ namespace BigNumberX
 
             while (i < len)
             {
-                xdigit = Get2CDigit(i, ref seenNonZero);
+                var xdigit = Get2CDigit(i, ref seenNonZero);
                 tempRes[len - i - 1] = ~xdigit;
                 i++;
             }
@@ -3013,7 +2974,7 @@ namespace BigNumberX
                 i++;
             }
 
-            tempRes[len - index - 1] |= (uint)1 << (n % 32);
+            tempRes[len - index - 1] |= (uint) 1 << (n % 32);
 
             return IsNegative()
                 ? new IntegerX(-1, RemoveLeadingZeros(MakeTwosComplement(tempRes)))
@@ -3029,21 +2990,17 @@ namespace BigNumberX
         /// <remarks>The value is treated as if in twos-complement.</remarks>
         public IntegerX ClearBit(int n)
         {
-            int index, i, len;
-            uint[] tempRes;
-            bool seenNonZero;
-
             if (!TestBit(n))
             {
                 return this;
             }
 
-            index = n / 32;
-            tempRes = new uint[Math.Max(_data.Length, index + 1)];
-            len = tempRes.Length;
+            var index = n / 32;
+            var tempRes = new uint[Math.Max(_data.Length, index + 1)];
+            var len = tempRes.Length;
 
-            seenNonZero = false;
-            i = 0;
+            var seenNonZero = false;
+            var i = 0;
 
             while (i < len)
             {
@@ -3051,14 +3008,11 @@ namespace BigNumberX
                 i++;
             }
 
-            tempRes[len - index - 1] &= ~((uint)1 << (n % 32));
+            tempRes[len - index - 1] &= ~((uint) 1 << (n % 32));
 
-            if (IsNegative())
-            {
-                return new IntegerX(-1, RemoveLeadingZeros(MakeTwosComplement(tempRes)));
-            }
-
-            return new IntegerX(1, RemoveLeadingZeros(tempRes));
+            return IsNegative()
+                ? new IntegerX(-1, RemoveLeadingZeros(MakeTwosComplement(tempRes)))
+                : new IntegerX(1, RemoveLeadingZeros(tempRes));
         }
 
         /// <summary>
@@ -3070,20 +3024,16 @@ namespace BigNumberX
         /// <remarks>The value is treated as if in twos-complement.</remarks>
         public IntegerX FlipBit(int n)
         {
-            int index, i, len;
-            uint[] tempRes;
-            bool seenNonZero;
-
             if (n < 0)
             {
                 throw new ArithmeticException("Negative bit address");
             }
 
-            index = n / 32;
-            tempRes = new uint[Math.Max(_data.Length, index + 1)];
-            len = tempRes.Length;
-            seenNonZero = false;
-            i = 0;
+            var index = n / 32;
+            var tempRes = new uint[Math.Max(_data.Length, index + 1)];
+            var len = tempRes.Length;
+            var seenNonZero = false;
+            var i = 0;
 
             while (i < len)
             {
@@ -3091,14 +3041,11 @@ namespace BigNumberX
                 i++;
             }
 
-            tempRes[len - index - 1] ^= (uint)1 << (n % 32);
+            tempRes[len - index - 1] ^= (uint) 1 << (n % 32);
 
-            if (IsNegative())
-            {
-                return new IntegerX(-1, RemoveLeadingZeros(MakeTwosComplement(tempRes)));
-            }
-
-            return new IntegerX(1, RemoveLeadingZeros(tempRes));
+            return IsNegative()
+                ? new IntegerX(-1, RemoveLeadingZeros(MakeTwosComplement(tempRes)))
+                : new IntegerX(1, RemoveLeadingZeros(tempRes));
         }
 
         /// <summary>
@@ -3110,9 +3057,7 @@ namespace BigNumberX
         /// <para>A negative shift count will be treated as a positive right shift.</para></remarks>
         public IntegerX LeftShift(int shift)
         {
-            int digitShift, bitShift, xlen, rShift, i, j;
             uint[] tempRes;
-            uint highBits;
 
             if (shift == 0)
             {
@@ -3129,9 +3074,9 @@ namespace BigNumberX
                 return RightShift(-shift);
             }
 
-            digitShift = (int)(shift / BitsPerDigit);
-            bitShift = (int)(shift % BitsPerDigit);
-            xlen = _data.Length;
+            var digitShift = (int) (shift / BitsPerDigit);
+            var bitShift = (int) (shift % BitsPerDigit);
+            var xlen = _data.Length;
 
             if (bitShift == 0)
             {
@@ -3140,9 +3085,10 @@ namespace BigNumberX
             }
             else
             {
-                rShift = (int)(BitsPerDigit - bitShift);
-                highBits = _data[0] >> rShift;
+                var rShift = (int) (BitsPerDigit - bitShift);
+                var highBits = _data[0] >> rShift;
 
+                int i;
                 if (highBits == 0)
                 {
                     tempRes = new uint[xlen + digitShift];
@@ -3155,7 +3101,7 @@ namespace BigNumberX
                     i = 1;
                 }
 
-                j = 0;
+                var j = 0;
                 while (j < xlen - 1)
                 {
                     tempRes[i] = (_data[j] << bitShift) | (_data[j + 1] >> rShift);
@@ -3178,9 +3124,9 @@ namespace BigNumberX
         /// <para>A negative shift count will be treated as a positive left shift.</para></remarks>
         public IntegerX RightShift(int shift)
         {
-            int digitShift, bitShift, xlen, i, j, rlen, lShift;
+            int i;
+            int rlen;
             uint[] tempRes;
-            uint hightBits;
 
             if (shift == 0)
             {
@@ -3197,21 +3143,14 @@ namespace BigNumberX
                 return LeftShift(-shift);
             }
 
-            digitShift = (int)(shift / BitsPerDigit);
-            bitShift = (int)(shift % BitsPerDigit);
+            var digitShift = (int) (shift / BitsPerDigit);
+            var bitShift = (int) (shift % BitsPerDigit);
 
-            xlen = _data.Length;
+            var xlen = _data.Length;
 
             if (digitShift >= xlen)
             {
-                if (_sign >= 0)
-                {
-                    return Zero;
-                }
-                else
-                {
-                    return NegativeOne;
-                }
+                return _sign >= 0 ? Zero : NegativeOne;
             }
 
             if (bitShift == 0)
@@ -3228,7 +3167,7 @@ namespace BigNumberX
             }
             else
             {
-                hightBits = _data[0] >> bitShift;
+                var hightBits = _data[0] >> bitShift;
 
                 if (hightBits == 0)
                 {
@@ -3244,8 +3183,8 @@ namespace BigNumberX
                     i = 1;
                 }
 
-                lShift = (int)(BitsPerDigit - bitShift);
-                j = 0;
+                var lShift = (int) (BitsPerDigit - bitShift);
+                var j = 0;
 
                 while (j < xlen - digitShift - 1)
                 {
@@ -3272,16 +3211,17 @@ namespace BigNumberX
                     return true;
 
                 case 1:
-                    if (_data[0] > (uint)0x80000000)
+                    if (_data[0] > (uint) 0x80000000)
                     {
                         return false;
                     }
 
-                    if (_data[0] == (uint)0x80000000 && _sign == 1)
+                    if (_data[0] == (uint) 0x80000000 && _sign == 1)
                     {
                         return false;
                     }
-                    ret = (int)_data[0] * _sign;
+
+                    ret = (int) _data[0] * _sign;
                     return true;
 
                 default:
@@ -3303,19 +3243,21 @@ namespace BigNumberX
                 case 0:
                     return true;
                 case 1:
-                    ret = _sign * (long)_data[0];
+                    ret = _sign * (long) _data[0];
                     return true;
                 case 2:
-                    var tmp = ((ulong)_data[0] << 32) | (ulong)_data[1];
+                    var tmp = ((ulong) _data[0] << 32) | (ulong) _data[1];
                     if (tmp > 0x8000000000000000)
                     {
                         return false;
                     }
+
                     if (tmp == 0x8000000000000000 && _sign == 1)
                     {
                         return false;
                     }
-                    ret = (long)tmp * _sign;
+
+                    ret = (long) tmp * _sign;
                     return true;
                 default:
                     return false;
@@ -3334,10 +3276,12 @@ namespace BigNumberX
             {
                 return true;
             }
+
             if (_sign < 0)
             {
                 return false;
             }
+
             if (_data.Length > 1)
             {
                 return false;
@@ -3365,10 +3309,10 @@ namespace BigNumberX
                 case 0:
                     return true;
                 case 1:
-                    ret = (ulong)_data[0];
+                    ret = (ulong) _data[0];
                     return true;
                 case 2:
-                    ret = (ulong)_data[1] | ((ulong)_data[0] << 32);
+                    ret = (ulong) _data[1] | ((ulong) _data[0] << 32);
                     return true;
                 default:
                     return false;
@@ -3385,7 +3329,7 @@ namespace BigNumberX
             uint ret;
             if (AsUInt(out ret) && ret <= 0xFF)
             {
-                return (byte)ret;
+                return (byte) ret;
             }
 
             throw new OverflowException("IntegerX value won't fit in Byte");
@@ -3401,8 +3345,9 @@ namespace BigNumberX
             int ret;
             if (AsInt(out ret) && MinShortValue <= ret && ret <= MaxShortValue)
             {
-                return (short)ret;
+                return (short) ret;
             }
+
             throw new OverflowException("IntegerX value won't fit in a Short");
         }
 
@@ -3416,8 +3361,9 @@ namespace BigNumberX
             int ret;
             if (AsInt(out ret) && MinSByteValue <= ret && ret <= MaxSByteValue)
             {
-                return (sbyte)ret;
+                return (sbyte) ret;
             }
+
             throw new OverflowException("IntegerX value won't fit in a SByte");
         }
 
@@ -3431,8 +3377,9 @@ namespace BigNumberX
             uint ret;
             if (AsUInt(out ret) && ret <= MaxUShortValue)
             {
-                return (ushort)ret;
+                return (ushort) ret;
             }
+
             throw new OverflowException("IntegerX value won't fit in a UShort");
         }
 
@@ -3448,6 +3395,7 @@ namespace BigNumberX
             {
                 return ret;
             }
+
             throw new OverflowException("IntegerX magnitude too large for UInt");
         }
 
@@ -3535,17 +3483,13 @@ namespace BigNumberX
             {
                 return x._sign * Compare(x._data, y._data);
             }
-            else
+
+            if (x._sign < y._sign)
             {
-                if (x._sign < y._sign)
-                {
-                    return -1;
-                }
-                else
-                {
-                    return 1;
-                }
+                return -1;
             }
+
+            return 1;
         }
 
         /// <summary>
@@ -3567,7 +3511,8 @@ namespace BigNumberX
         {
             if (radix < MinRadix || radix > MaxRadix)
             {
-                throw new ArgumentOutOfRangeException(string.Format(_FS, "Radix {0} is out of range. MinRadix = {1}, MaxRadix = {2}", radix, MinRadix, MaxRadix));
+                throw new ArgumentOutOfRangeException(string.Format(_FS,
+                    "Radix {0} is out of range. MinRadix = {1}, MaxRadix = {2}", radix, MinRadix, MaxRadix));
             }
 
             if (_sign == 0)
@@ -3592,7 +3537,7 @@ namespace BigNumberX
 
             var sb = new StringBuilder(rems.Count * RadixDigitsPerDigit[radix] + 1);
 
-                
+
             if (_sign < 0)
             {
                 sb.Append('-');
@@ -3608,8 +3553,8 @@ namespace BigNumberX
                 AppendDigit(ref sb, rems[i], radix, charBuf, true);
                 i--;
             }
-            return sb.ToString();
 
+            return sb.ToString();
         }
 
         /// <summary>
@@ -3655,7 +3600,7 @@ namespace BigNumberX
             uint n;
 
             var m = _data;
-            var len = (uint)m.Length;
+            var len = (uint) m.Length;
             if (len == 0)
             {
                 n = 0;
@@ -3693,13 +3638,10 @@ namespace BigNumberX
 
         public uint BitCount()
         {
-            uint j;
-            uint[] m;
-
-            m = _data;
+            var m = _data;
             uint bc = 0;
             uint i = 0;
-            var len = (uint)_data.Length;
+            var len = (uint) _data.Length;
 
             while (i < len)
             {
@@ -3710,7 +3652,7 @@ namespace BigNumberX
             if (Signum() < 0)
             {
                 uint magTrailingZeroCount = 0;
-                j = len - 1;
+                var j = len - 1;
 
                 while (m[j] == 0)
                 {
@@ -3718,7 +3660,7 @@ namespace BigNumberX
                     j--;
                 }
 
-                magTrailingZeroCount += (uint)TrailingZerosCount(m[j]);
+                magTrailingZeroCount += (uint) TrailingZerosCount(m[j]);
                 bc += magTrailingZeroCount - 1;
             }
 
@@ -3727,7 +3669,7 @@ namespace BigNumberX
 
         public byte[] toByteArray()
         {
-            var byteLen = (int)(BitLength() / 8) +1;
+            var byteLen = (int) (BitLength() / 8) + 1;
             var result = new byte[byteLen];
             var i = byteLen - 1;
             var bytesCopied = 4;
@@ -3747,14 +3689,12 @@ namespace BigNumberX
                     nextInt >>= 8;
                     bytesCopied++;
                 }
-                result[i] = (byte)nextInt;
+
+                result[i] = (byte) nextInt;
                 i--;
             }
 
             return result;
         }
-
     }
-
-
 }
